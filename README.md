@@ -1,0 +1,1 @@
+This project (Tiny_URL) is an API that allows a person to create a shortened URL.  

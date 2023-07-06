@@ -1,0 +1,22 @@
+{
+  "name": "tiny_url",
+  "version": "1.0.0",
+  "description": "Tiny_URL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Moliki-Salman/Tiny_URL.git"
+  },
+  "keywords": [
+    "URL"
+  ],
+  "author": "Moliki-Salman Damilola Aminah",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Moliki-Salman/Tiny_URL/issues"
+  },
+  "homepage": "https://github.com/Moliki-Salman/Tiny_URL#readme"
+}
