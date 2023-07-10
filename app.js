@@ -3,10 +3,10 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const app =  express();
 
-
-
 const connect = require("./configuration/connection");
 connect();
+
+const routes = require("./routes/routesUser")
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/user", routesAccoutAuth);
