@@ -1,11 +1,17 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const app =  express();
 
-const connect = require("./configuration/connection")
+const routesAccoutAuth = require("./routes/routes.User");
+
+const connect = require("./configuration/connection");
 connect();
 
+app.use(express());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use("/user", routesAccoutAuth);
 
-app = express();
 
 
 const PORT = process.env.PORT 
