@@ -8,8 +8,9 @@ connect();
 
 const routes = require("./routes/routesUser")
 
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use("/user", routesAccoutAuth);
+app.use("/user", routes);
 
 
 
