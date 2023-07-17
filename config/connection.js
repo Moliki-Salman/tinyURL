@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const {config} = require("dotenv");
 config();
 
-async function connection() {
+async function connectToDataBase() {
     try {
         mongoose.connect(process.env.MONGO_DB_LOCAL_HOST);
         console.log("Server is connected to MongoDB");
@@ -11,4 +11,4 @@ async function connection() {
     };
 };
 
-module.exports = connection;
+module.exports = connectToDataBase;
