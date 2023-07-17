@@ -3,18 +3,20 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const app =  express();
 
-const connect = require("./configuration/connection");
-connect();
+const connectDB = require("./config/connection");
+connectDB();
 
-const routes = require("./routes/routesUser")
+const userRoutes = require("./routes/userRoutes")
+const urlRoutes = require("./routes/urlRoutes")
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use("/user", routes);
+app.use("/user", userRoutes);
+app.use("/", urlRoutes)
 
 
 
-const PORT = process.env.PORT 
+const PORT = 3000
 app.listen(PORT, () => console.log(`app is runnning on port ${PORT}`));
 
 
