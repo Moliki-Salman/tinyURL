@@ -1,7 +1,9 @@
+const mongoose = require("mongoose");
 const config = require("config");
 const shortid = require("shortid");
 const validUrl = require("valid-url");
 const urlModel = require("../model/urlModel");
+
 
 const createTinyUrl = async (req, res) => {
   const { longUrl } = req.body;
@@ -26,6 +28,7 @@ const createTinyUrl = async (req, res) => {
           longUrl,
           shortUrl,
           urlCode,
+          // user,
           date: new Date(),
         });
         await url.save();
@@ -42,7 +45,7 @@ const createTinyUrl = async (req, res) => {
 
 const getTinyUrl = async (req, res) => {
   try {
-    const url = await urlModel.findOne({ urlCode: req.params.code });
+    const url = await urlModel.findOne({ urlCode: req.params.code }).populate("user")
     if (url) {
       return res.redirect(308, url.longUrl);
     } else {
@@ -57,7 +60,7 @@ const getTinyUrl = async (req, res) => {
 
 const getAllTinyUrl = async (req, res) => {
   try {
-    const url = await urlModel.find();
+    const url = await urlModel.find()
     return res.status(201).json({ AllURLs: url })
   } catch (error) {
     res.status(500).json("Request failed")
@@ -74,5 +77,7 @@ const deleteTinyUrl = async (req, res) => {
 };
 
 
-module.exports = { createTinyUrl, getTinyUrl, getAllTinyUrl, deleteTinyUrl };
+
+
+module.exports = { createTinyUrl, getTinyUrl, getAllTinyUrl, deleteTinyUrl, };
 

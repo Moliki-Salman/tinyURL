@@ -9,10 +9,12 @@ connectDB();
 const userRoutes = require("./routes/userRoutes")
 const urlRoutes = require("./routes/urlRoutes")
 
+
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/user", userRoutes);
-app.use("/", urlRoutes)
+app.use("/url", urlRoutes)
+
 
 
 

@@ -2,14 +2,14 @@ const express = require("express");
 const router = express.Router();
 
 const urlController = require("../controller/urlController")
-
+const checkAuth = require("../middleware/Authentication")
 
 
 router
-.post("/", urlController.createTinyUrl)
-.get("/:code", urlController.getTinyUrl)
-.get("/", urlController.getAllTinyUrl)
-.delete("/:code", urlController.deleteTinyUrl)
+.post("/", checkAuth, urlController.createTinyUrl)
+.get("/:code",checkAuth,urlController.getTinyUrl)
+.get("/", checkAuth, urlController.getAllTinyUrl)
+.delete("/:code", checkAuth, urlController.deleteTinyUrl)
 
 
 module.exports = router;
