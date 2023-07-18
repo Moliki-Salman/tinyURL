@@ -56,9 +56,12 @@ const getTinyUrl = async (req, res) => {
 
 
 const getAllTinyUrl = async (req, res) => {
+  const { authorization } = req.headers
+  const token = authorization.split(" ")[1] 
+  console.log(token)
   try {
     const url = await urlModel.find();
-    return res.status(201).json({ AllURLs: url })
+    return res.status(200).json({ AllURLs: url })
   } catch (error) {
     res.status(500).json("Request failed")
   }
