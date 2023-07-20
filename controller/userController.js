@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 const SECRET_KEY = "ABCDEFG";
 
 const signup = async (req, res) => {
-  const { firstname, lastname, email, password } = req.body;
+  const { firstname, lastname, email, role, password } = req.body;
   try {
     const existingUser = await UserModel.findOne({ email: email });
     if (existingUser) {
@@ -22,10 +22,11 @@ const signup = async (req, res) => {
         firstname: firstname,
         lastname: lastname,
         email: email,
+        role: role,
         password: hashedPassword,
       });
       const token = jwt.sign(
-        { email: result.email, id: result._id },
+        { email: result.email, id: result._id, role: result.role },
         SECRET_KEY
       );
       res.status(201).json({ user: result, token: token });
@@ -41,7 +42,7 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const existingUser = await UserModel.findOne({ email: email });
+    const existingUser = await UserModel.findOne({ email: email});
     if (!existingUser) {
       return res.status(400).json({ message: "User  not found" });
     };
@@ -51,10 +52,12 @@ const login = async (req, res) => {
       existingUser.password,
       function (err, matchedpassword) {
         if (!matchedpassword) {
+          // const roles = object.values(existingUser.role)
           return res.status(400).json({ mesaage: "Invalid credentials" });
         }
+        
         const token = jwt.sign(
-          { email: existingUser.email, id: existingUser._id },
+          { email: existingUser.email, id: existingUser._id, role: existingUser.role },
           SECRET_KEY
         );
         res.status(201).json({ user: existingUser, token: token });

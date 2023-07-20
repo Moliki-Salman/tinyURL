@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema ({
+    _id: mongoose.Schema.Types.ObjectId,
     firstname: {
         type: String,
         require: true,
@@ -18,7 +19,14 @@ const UserSchema = new Schema ({
     password: {
         type: String,
         require: true,
-    }
+    },
+    role: {
+        type: String,
+        enum: ["regular", "admin"],
+        default: "regular"
+    },
+    url: { type: mongoose.Schema.Types.ObjectId, ref: "url" }
+
 },
 {
     timestamp: true,
