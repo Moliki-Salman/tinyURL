@@ -2,7 +2,8 @@ const jwt = require("jsonwebtoken");
 const SECRET_KEY = "ABCDEFG";
 
  const authenticateToken = async (req, res, next) => {
-  const token = req.headers.authorization.split(" ")[1];
+  const { authorization } = req.headers
+  const token = authorization.split(" ")[1] 
   console.log(token)
   if (!token) {
     return res.status(402).json("valid token required")
@@ -11,7 +12,6 @@ const SECRET_KEY = "ABCDEFG";
     const decodedToken = jwt.verify(token, SECRET_KEY)
     console.log(decodedToken)
     req.user = decodedToken
-    // req.roles = decodedToken.role
     next();
   } catch (error) {
     res.status(401).json({
@@ -35,7 +35,4 @@ function checkUserRole(role) {
 
 module.exports = authenticateToken, checkUserRole
  
-  
- // const { authorization } = req.headers
-  // const token = authorization.split(" ")[1] 
-  // console.log(token)
+ 
