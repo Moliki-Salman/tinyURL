@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const UserModel = require("../model/userModel");
 const bcrypt = require("bcrypt");
 
+
 const SECRET_KEY = "ABCDEFG";
 
 const signup = async (req, res) => {

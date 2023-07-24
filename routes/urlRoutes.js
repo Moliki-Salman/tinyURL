@@ -7,10 +7,12 @@ const checkUserRole = require("../middleware/Authentication");
 
 
 
+
 router
 .post("/", authenticateUser,checkUserRole, urlController.createTinyUrl)
 .get("/:code", authenticateUser,  urlController.getTinyUrl)
 .get("/", authenticateUser,  urlController.getAllTinyUrl)
+.get("/urls/:userId/", authenticateUser, urlController.getAllUserTinyUrls)
 .delete("/:code", authenticateUser, urlController.deleteTinyUrl)
 
 

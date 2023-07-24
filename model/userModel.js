@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema(
   {
-    _id: mongoose.Schema.Types.ObjectId,
+    _id: Schema.Types.ObjectId,
     firstname: {
       type: String,
       require: true,
@@ -26,11 +26,12 @@ const UserSchema = new Schema(
       enum: ["regular", "admin"],
       default: "regular",
     },
-    url: { type: mongoose.Schema.Types.ObjectId, ref: "url" },
+     url: {
+    type: mongoose.Schema.Types.ObjectId, ref: "url",
+  },
   },
   {
     timestamp: true,
-  }
-);
+  });
 
 module.exports = mongoose.model("user", UserSchema);

@@ -2,12 +2,13 @@ const config = require("config");
 const shortid = require("shortid");
 const validUrl = require("valid-url");
 const urlModel = require("../model/urlModel");
+const userModel = require("../model/userModel");
 const jwt = require("jsonwebtoken");
 const SECRET_KEY = "ABCDEFG";
 
 const createTinyUrl = async (req, res) => {
    console.log({ user: req.user })
-  const { longUrl } = req.body;
+  const { longUrl, user } = req.body;
   const rootUrl = config.get("rootUrl");
   if (!validUrl.isUri(rootUrl)) {
     return res.status(401).json("Root URL not valid");
@@ -18,17 +19,16 @@ const createTinyUrl = async (req, res) => {
   // check long url
   if (validUrl.isUri(longUrl)) {
     try {
-      let url = await urlModel.findOne({ longUrl });
-
+      let url = await urlModel.findOne({ longUrl, user });
       if (url) {
         res.json(url);
       } else {
         const shortUrl = rootUrl + "/" + urlCode;
-
         url = new urlModel({
           longUrl,
           shortUrl,
           urlCode,
+          user,
           date: new Date(),
         });
         await url.save();
@@ -58,15 +58,10 @@ const getTinyUrl = async (req, res) => {
 };
 
 const getAllTinyUrl = async (req, res) => {
-  // const { authorization } = req.headers;
-  // const token = authorization.split(" ")[1];
-  // const decodedToken = jwt.verify(token, SECRET_KEY);
-  // req.user = decodedToken;
-  // console.log({ user: req.user });
   console.log({ user: req.user})
   try {
     const url = await urlModel.find();
-    return res.status(200).json({ AllURLs: url });
+    return res.status(200).json({ AllUrls: url });
   } catch (error) {
     res.status(500).json("Request failed");
   }
@@ -82,4 +77,20 @@ const deleteTinyUrl = async (req, res) => {
   }
 };
 
-module.exports = { createTinyUrl, getTinyUrl, getAllTinyUrl, deleteTinyUrl };
+const getAllUserTinyUrls  = async (req, res) => {
+  try {
+    const { userId } = req.params
+    const user = await userModel.findById(userId)
+     if (!user) {
+      return res.status(404).json({ message: 'User not found', error: error.message});
+    }
+    const urls = await userModel.find({ user: userId })
+    .populate('user');
+    const shortUrls = urls.map(url => url.shortUrl);
+    res.status(200).json({ user: user.email, shortUrls })
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+}
+
+module.exports = { createTinyUrl, getTinyUrl, getAllTinyUrl, deleteTinyUrl, getAllUserTinyUrls };
