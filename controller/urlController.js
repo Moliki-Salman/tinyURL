@@ -2,10 +2,9 @@ const config = require("config");
 const shortid = require("shortid");
 const validUrl = require("valid-url");
 const urlModel = require("../model/urlModel");
-const UserModel = require("../model/userModel");
+
 
 const createTinyUrl = async (req, res) => {
- 
   const { longUrl } = req.body;
   const rootUrl = config.get("rootUrl");
   if (!validUrl.isUri(rootUrl)) {
@@ -13,7 +12,6 @@ const createTinyUrl = async (req, res) => {
   }
   // create url code
   const urlCode = shortid.generate();
-
   // check long url
   if (validUrl.isUri(longUrl)) {
     try {
@@ -32,7 +30,6 @@ const createTinyUrl = async (req, res) => {
         res.json(url);
       }
     } catch (error) {
-      console.log(error);
       res.status(500).json("Internal Server error");
     }
   } else {
@@ -42,7 +39,6 @@ const createTinyUrl = async (req, res) => {
 
 const getTinyUrl = async (req, res) => {
   try {
-    
     const url = await urlModel.findOne({ urlCode: req.params.code });
     if (url) {
       return res.redirect(308, url.longUrl);

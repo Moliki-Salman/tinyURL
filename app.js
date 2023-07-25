@@ -12,7 +12,7 @@ const urlRoutes = require("./routes/urlRoutes");
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/user", userRoutes);
-app.use("/", urlRoutes);
+app.use("/url", urlRoutes);
 
 const PORT = 3000
 app.listen(PORT, () => console.log(`app is runnning on port ${PORT}`));

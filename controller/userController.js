@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const UserModel = require("../model/userModel");
 const bcrypt = require("bcrypt");
-
+const userModel = require("../model/userModel");
 const SECRET_KEY = "ABCDEFG";
 
 const signup = async (req, res) => {
@@ -34,7 +34,7 @@ const signup = async (req, res) => {
     console.log(error);
     res
       .status(500)
-      .json({ message: "something went wrong", error: JSON.stringify(error) });
+      .json({ message: "Internal Server error", error: JSON.stringify(error) });
   }
 };
 
@@ -68,9 +68,21 @@ const login = async (req, res) => {
     console.log(error);
     res
       .status(500)
-      .json({ message: "something went wrong", error: JSON.stringify(error) });
+      .json({ message: "Internal Server error", error: JSON.stringify(error) });
   }
 };
 
+const deleteUser = async (req, res) => {
+  try {
+    const user = await userModel.findByIdAndDelete(req.params.id);
+    return res
+      .status(200)
+      .json({ data: user,  mesaage: "account deleted successfully", error: error.message });
+  } catch (error) {
+    res
+    .status(500)
+      .json({ message: "Internal Server error", error: JSON.stringify(error) });
+  }
+};
 
-module.exports = { signup, login };
+module.exports = { signup, login, deleteUser };
