@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const SECRET_KEY = "ABCDEFG";
 
 const signup = async (req, res) => {
-  const { firstname, lastname, email, role, password } = req.body;
+  const { firstname, lastname, email, password } = req.body;
   try {
     const existingUser = await UserModel.findOne({ email: email });
     if (existingUser) {
@@ -21,11 +21,11 @@ const signup = async (req, res) => {
         firstname: firstname,
         lastname: lastname,
         email: email,
-        role: role,
+        _id: id,
         password: hashedPassword,
       });
       const token = jwt.sign(
-        { email: result.email, id: result._id, role: result.role },
+        { email: result.email, id: result._id },
         SECRET_KEY
       );
       res.status(201).json({ user: result, token: token });
@@ -58,7 +58,6 @@ const login = async (req, res) => {
           {
             email: existingUser.email,
             id: existingUser._id,
-            role: existingUser.role,
           },
           SECRET_KEY
         );
@@ -72,5 +71,6 @@ const login = async (req, res) => {
       .json({ message: "something went wrong", error: JSON.stringify(error) });
   }
 };
+
 
 module.exports = { signup, login };

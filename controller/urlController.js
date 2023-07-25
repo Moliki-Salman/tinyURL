@@ -2,11 +2,10 @@ const config = require("config");
 const shortid = require("shortid");
 const validUrl = require("valid-url");
 const urlModel = require("../model/urlModel");
-const jwt = require("jsonwebtoken");
-const SECRET_KEY = "ABCDEFG";
+const UserModel = require("../model/userModel");
 
 const createTinyUrl = async (req, res) => {
-   console.log({ user: req.user })
+ 
   const { longUrl } = req.body;
   const rootUrl = config.get("rootUrl");
   if (!validUrl.isUri(rootUrl)) {
@@ -19,12 +18,10 @@ const createTinyUrl = async (req, res) => {
   if (validUrl.isUri(longUrl)) {
     try {
       let url = await urlModel.findOne({ longUrl });
-
       if (url) {
         res.json(url);
       } else {
         const shortUrl = rootUrl + "/" + urlCode;
-
         url = new urlModel({
           longUrl,
           shortUrl,
@@ -44,8 +41,8 @@ const createTinyUrl = async (req, res) => {
 };
 
 const getTinyUrl = async (req, res) => {
-   console.log({ user: req.user })
   try {
+    
     const url = await urlModel.findOne({ urlCode: req.params.code });
     if (url) {
       return res.redirect(308, url.longUrl);
@@ -53,33 +50,28 @@ const getTinyUrl = async (req, res) => {
       return res.status(404).json({ message: "No Url found" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Internal Server error" });
+    res.status(500).json({ message: "Internal Server error", error: error.message });
   }
 };
 
-const getAllTinyUrl = async (req, res) => {
-  // const { authorization } = req.headers;
-  // const token = authorization.split(" ")[1];
-  // const decodedToken = jwt.verify(token, SECRET_KEY);
-  // req.user = decodedToken;
-  // console.log({ user: req.user });
-  console.log({ user: req.user})
+const getAllTinyUrls = async (req, res) => {
   try {
+    const userId = req.user.id;
     const url = await urlModel.find();
-    return res.status(200).json({ AllURLs: url });
+    return res.status(200).json({ userId , ListOfCreatedUrls: url });
   } catch (error) {
-    res.status(500).json("Request failed");
+    res.status(500).json({ message: "Request failed", error: error.message });
   }
 };
 
 const deleteTinyUrl = async (req, res) => {
-  // console.log({ user: req.user })
   try {
     const url = await urlModel.deleteOne(req.params.id);
     return res.status(201).json("sucessfully deleted URL");
   } catch (error) {
-    res.status(500).json("Request failed");
+    res.status(500).json({ message: "Request failed", error: error.message });
   }
 };
 
-module.exports = { createTinyUrl, getTinyUrl, getAllTinyUrl, deleteTinyUrl };
+module.exports = { createTinyUrl, getTinyUrl, getAllTinyUrls, deleteTinyUrl }
+
