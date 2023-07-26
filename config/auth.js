@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const { config } = require("dotenv");
 config()
 
-
 const authenticateUser = async (req, res, next) => {
   const { authorization } = req.headers;
   const token = authorization.split(" ")[1];
@@ -10,7 +9,7 @@ const authenticateUser = async (req, res, next) => {
     return res.status(402).json("valid token required");
   }
   try {
-    const decodedToken = jwt.verify(token, process.envSECRET_KEY);
+    const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
     req.user= decodedToken;
     next();
   } catch (error) {

@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const UserModel = require("../model/userModel");
 const bcrypt = require("bcrypt");
 const userModel = require("../model/userModel");
-const SECRET_KEY = "ABCDEFG";
+// const SECRET_KEY = "ABCDEFG";
 
 const signup = async (req, res) => {
   const { firstname, lastname, email, password } = req.body;
@@ -21,12 +21,11 @@ const signup = async (req, res) => {
         firstname: firstname,
         lastname: lastname,
         email: email,
-        _id: id,
         password: hashedPassword,
       });
       const token = jwt.sign(
         { email: result.email, id: result._id },
-        SECRET_KEY
+        process.env.SECRET_KEY
       );
       res.status(201).json({ user: result, token: token });
     });
@@ -59,7 +58,7 @@ const login = async (req, res) => {
             email: existingUser.email,
             id: existingUser._id,
           },
-          SECRET_KEY
+          process.env.SECRET_KEY
         );
         res.status(201).json({ user: existingUser, token: token });
       }

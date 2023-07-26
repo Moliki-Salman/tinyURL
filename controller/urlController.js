@@ -2,7 +2,7 @@ const config = require("config");
 const shortid = require("shortid");
 const validUrl = require("valid-url");
 const urlModel = require("../model/urlModel");
-
+const UserModel = require("../model/userModel");
 
 const createTinyUrl = async (req, res) => {
   const { longUrl } = req.body;
