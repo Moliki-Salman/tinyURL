@@ -71,7 +71,6 @@ const login = async (req, res) => {
   }
 };
 
-
 const deleteUser = async (req, res) => {
   try {
     const { id } = req.body;
@@ -87,7 +86,5 @@ const deleteUser = async (req, res) => {
       .json({ message: "Internal Server error", error: JSON.stringify(error) });
   }
 };
-
-
 
 module.exports = { signup, login, deleteUser };
