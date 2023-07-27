@@ -2,7 +2,6 @@ const config = require("config");
 const shortid = require("shortid");
 const validUrl = require("valid-url");
 const urlModel = require("../model/urlModel");
-const UserModel = require("../model/userModel");
 
 const createTinyUrl = async (req, res) => {
   const { longUrl } = req.body;
@@ -54,16 +53,6 @@ const getTinyUrl = async (req, res) => {
   }
 };
 
-// const getAllTinyUrls = async (req, res) => {
-//   try {
-//     const userId = req.user.id;
-//     const url = await urlModel.find();
-//     return res.status(200).json({ userId, ListOfCreatedUrls: url });
-//   } catch (error) {
-//     res.status(500).json({ message: "Request failed", error: error.message });
-//   }
-// };
-
 const getAllTinyUrls = async (req, res) => {
   try {
     const userId = req.user.id
@@ -73,9 +62,10 @@ const getAllTinyUrls = async (req, res) => {
     res.status(500).json({ message: "Request failed", error: error.message });
   }
 };
+
 const deleteTinyUrl = async (req, res) => {
   try {
-    const url = await urlModel.deleteOne(req.params.id);
+    const url = await urlModel.deleteOne({urlCode: req.params.code });
     return res.status(201).json("sucessfully deleted URL");
   } catch (error) {
     res.status(500).json({ message: "Request failed", error: error.message });
