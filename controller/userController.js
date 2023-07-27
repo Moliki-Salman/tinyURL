@@ -3,7 +3,6 @@ const UserModel = require("../model/userModel");
 const bcrypt = require("bcrypt");
 const userModel = require("../model/userModel");
 
-
 const signup = async (req, res) => {
   const { firstname, lastname, email, password } = req.body;
   try {
