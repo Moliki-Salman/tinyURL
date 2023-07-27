@@ -71,17 +71,23 @@ const login = async (req, res) => {
   }
 };
 
+
 const deleteUser = async (req, res) => {
   try {
-    const user = await userModel.findByIdAndDelete(req.params.id);
-    return res
-      .status(200)
-      .json({ data: user,  mesaage: "account deleted successfully", error: error.message });
+    const { id } = req.body;
+    const user = await userModel.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    await user.deleteOne();
+    res.status(200).json({ message: "User deleted successfully", user });
   } catch (error) {
     res
-    .status(500)
+      .status(500)
       .json({ message: "Internal Server error", error: JSON.stringify(error) });
   }
 };
+
+
 
 module.exports = { signup, login, deleteUser };

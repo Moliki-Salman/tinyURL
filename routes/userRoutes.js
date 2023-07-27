@@ -7,6 +7,6 @@ const  authenticateUser = require("../config/auth");
 router
 .post("/signup", controller.signup)
 .post("/login", controller.login)
-.delete("/delete/:id", authenticateUser, controller.deleteUser)
+.delete("/delete",authenticateUser, controller.deleteUser)
 
 module.exports = router;

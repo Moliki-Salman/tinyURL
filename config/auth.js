@@ -4,19 +4,20 @@ config()
 
 const authenticateUser = async (req, res, next) => {
   const { authorization } = req.headers;
+
   const token = authorization.split(" ")[1];
   if (!token) {
-    return res.status(402).json("valid token required");
+    return res.status(401).json("valid token required");
   }
   try {
     const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
     req.user= decodedToken;
     next();
   } catch (error) {
-    res.status(401).json({
+    return res.status(401).json({
       message: "Authentication failed",
     });
   }
 };
 
-(module.exports =  authenticateUser )
+module.exports =  authenticateUser 
