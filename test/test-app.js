@@ -11,7 +11,7 @@ describe("url", () => {
   beforeEach(async () => {
     await urlModel.deleteMany({});
   });
-  //get url routes
+  // test routes  to get all urls 
   describe("/GET url", () => {
     it("it should GET all the urls that belongs to a user", () => {
       chai
@@ -25,4 +25,28 @@ describe("url", () => {
         });
     });
   });
+
+  describe("POST url", () => {
+    it("It should create a new shortUrl", () => {
+      let url = {
+        longUrl: "https://longurl.com"
+      };
+      chai.request(app)
+      .post("/")
+      .send(url)
+      .end((error, res) => {
+        res.should.have(200);
+        res.body.should.be.a("object")
+        res.status.should.be.eql(200);
+        done();
+      });
+    });
+  });
+
+
+
+
+
+
+
 });
