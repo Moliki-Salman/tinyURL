@@ -61,23 +61,23 @@ describe("user", () => {
         });
     });
   });
+  
   // test routes to delete user
   describe("DELETE user", () => {
     it("it should delete a user's account", async () => {
-     let user = {
-      id: "user's id"
-     };
+      let user = {
+        id: "user's id",
+      };
 
-     chai.request(app)
-     .delete("/user/delete" )
-     .send(user)
-     .end((error, res) => {
-      res.should.have.status(200)
-      res.body.should.be.a("object")
-      res.status.should.be.eql(200);
-     })
+      chai
+        .request(app)
+        .delete("/user/delete")
+        .send(user)
+        .end((error, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a("object");
+          res.status.should.be.eql(200);
+        });
     });
-  })
-
-
+  });
 });
