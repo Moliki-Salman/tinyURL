@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-let urlModel = require("../model/urlModel");
+let urlModel = require("../models/url-model");
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const app = require("../app");
@@ -11,7 +11,7 @@ describe("url", () => {
   beforeEach(async () => {
     await urlModel.deleteMany({});
   });
-  
+
   // test routes  to get all tiny urls
   describe("GET url", () => {
     it("it should GET all the urls that belongs to a user", async () => {

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-let userModel = require("../model/userModel");
+let userModel = require("../models/user-model");
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const app = require("../app");
@@ -70,7 +70,7 @@ describe("user", () => {
 
       chai
         .request(app)
-        .delete("/user/delete")
+        .delete("/user/delete + user.id")
         .send(user)
         .end((error, res) => {
           res.should.have.status(200);

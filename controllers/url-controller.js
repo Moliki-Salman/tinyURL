@@ -1,7 +1,7 @@
 const config = require("config");
 const shortid = require("shortid");
 const validUrl = require("valid-url");
-const urlModel = require("../model/urlModel");
+const urlModel = require("../models/url-model");
 
 const createTinyUrl = async (req, res) => {
   const { longUrl } = req.body;
@@ -19,7 +19,7 @@ const createTinyUrl = async (req, res) => {
         res.json(url);
       } else {
         const shortUrl = rootUrl + "/" + urlCode;
-        const userId =  req.user.id;
+        const userId = req.user.id;
         url = new urlModel({
           longUrl,
           shortUrl,
@@ -55,7 +55,7 @@ const getTinyUrl = async (req, res) => {
 
 const getAllTinyUrls = async (req, res) => {
   try {
-    const userId = req.user.id
+    const userId = req.user.id;
     const url = await urlModel.find({ user: userId }).populate("user", "email");
     return res.status(200).json({ url });
   } catch (error) {
@@ -65,7 +65,7 @@ const getAllTinyUrls = async (req, res) => {
 
 const deleteTinyUrl = async (req, res) => {
   try {
-    const url = await urlModel.deleteOne({urlCode: req.params.code });
+    const url = await urlModel.deleteOne({ urlCode: req.params.code });
     return res.status(200).json({ message: "url deleted sucessfully" });
   } catch (error) {
     res.status(500).json({ message: "Request failed", error });
