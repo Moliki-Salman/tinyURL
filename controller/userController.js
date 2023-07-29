@@ -59,7 +59,7 @@ const login = async (req, res) => {
           },
           process.env.SECRET_KEY
         );
-        res.status(201).json({ user: existingUser, token: token });
+        res.status(200).json({ user: existingUser, token: token });
       }
     );
   } catch (error) {
