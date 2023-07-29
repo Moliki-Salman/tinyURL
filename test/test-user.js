@@ -6,7 +6,6 @@ const app = require("../app");
 chai.should();
 
 chai.use(chaiHttp);
-
 // USER TEST: empty the database before user's test is carried out
 describe("user", () => {
   beforeEach(async () => {
@@ -61,7 +60,7 @@ describe("user", () => {
         });
     });
   });
-  
+
   // test routes to delete user
   describe("DELETE user", () => {
     it("it should delete a user's account", async () => {
