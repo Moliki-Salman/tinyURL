@@ -41,9 +41,8 @@ const login = async (req, res) => {
   try {
     const existingUser = await UserModel.findOne({ email: email });
     if (!existingUser) {
-      return res.status(400).json({ message: "User  not found" });
+      return res.status(400).json({ message: "User  does not exist" });
     }
-
     bcrypt.compare(
       password,
       existingUser.password,
@@ -59,7 +58,7 @@ const login = async (req, res) => {
           },
           process.env.SECRET_KEY
         );
-        res.status(201).json({ user: existingUser, token: token });
+        res.status(200).json({ user: existingUser, token: token });
       }
     );
   } catch (error) {
