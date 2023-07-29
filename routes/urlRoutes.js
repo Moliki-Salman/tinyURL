@@ -10,5 +10,4 @@ router
 .get("/", authenticateUser,  urlController.getAllTinyUrls)
 .delete("/:code", authenticateUser, urlController.deleteTinyUrl)
 
-
 module.exports = router

@@ -66,9 +66,9 @@ const getAllTinyUrls = async (req, res) => {
 const deleteTinyUrl = async (req, res) => {
   try {
     const url = await urlModel.deleteOne({urlCode: req.params.code });
-    return res.status(201).json("sucessfully deleted URL");
+    return res.status(200).json({ message: "url deleted sucessfully" });
   } catch (error) {
-    res.status(500).json({ message: "Request failed", error: error.message });
+    res.status(500).json({ message: "Request failed", error });
   }
 };
 
