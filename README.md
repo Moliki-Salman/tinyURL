@@ -66,7 +66,7 @@ $ npm install jsonwebtoken
 ```bash
 $ npm install bcrypt
 ```
-9. Install mocha as the web framework.
+9. Install mocha as the test application framework.
 ```bash
 $ npm install mocha
 ```
@@ -122,11 +122,11 @@ DELETE http://localhost:3000/user/delete | To login an existing user account
 POST http://localhost:3000/signup | To create a tiny url
 ```
 ```http
-GET http://localhost:3000 | To get all urls created by a user
+GET http://localhost:3000 | To get all tiny urls created by a user
 ```
 ```http
-GET http://localhost:3000/:code | To get a url by urlcode
+GET http://localhost:3000/:code | To get a tiny url by urlcode
 ```
 ```http
-DELETE http://localhost:3000/:code | To delete a url by urlcode
+DELETE http://localhost:3000/:code | To delete a tiny url by urlcode
 ```
