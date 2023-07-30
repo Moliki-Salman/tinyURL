@@ -87,6 +87,13 @@ $ npm install nodemon
 $ npm install dotenv 
 ```
 
+## Testing 
+ 
+To test this project API, run locally
+
+```bash
+$ npm run test
+```
 
 ## Running the App
 
@@ -96,17 +103,8 @@ $ nodemon app.js
 ```
 2. connect the API using postman on port 3000
 
-## Testing 
- 
-To test this project API, run locally
-
-```bash
-$ npm run test
-```
-
 
 ## API Endpoints
-
 
 
 ```http
