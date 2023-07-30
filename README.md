@@ -24,13 +24,11 @@ Clone this repository and run locally
 git clone https://github.com/Moliki-Salman/tinyURL.git
 ```
 
-```bash
-Install mongoDB database locally or connect with mongoDB Atlas database
-```
 
-```bash
-Run npm install to install all dependencies
-```
+Install mongoDB database locally or connect with mongoDB Atlas database.
+
+Run npm install to install all dependencies.
+
 ## Dependencies
  
 
