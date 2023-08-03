@@ -6,7 +6,7 @@ const  authenticateUser = require("../config/auth");
 
 router
 .post("/", authenticateUser, urlController.createTinyUrl)
-.get("/:code", authenticateUser,  urlController.getTinyUrl)
+.get("/:code",  urlController.getTinyUrl)
 .get("/", authenticateUser,  urlController.getAllTinyUrls)
 .delete("/:code", authenticateUser, urlController.deleteTinyUrl)
 
