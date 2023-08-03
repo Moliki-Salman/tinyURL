@@ -20,7 +20,6 @@ const UserSchema = new Schema(
       type: String,
       require: true,
     },
-    url: { type: Schema.Types.ObjectId, ref: "url" },
   },
   {
     timestamp: true,
