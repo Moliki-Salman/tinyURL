@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/user-model");
 const bcrypt = require("bcrypt");
-const userModel = require("../models/user-model");
 
 const signup = async (req, res) => {
   const { firstname, lastname, email, password } = req.body;
@@ -16,16 +15,14 @@ const signup = async (req, res) => {
         throw new Error("error", { cause: err });
       }
       // Store hash in your password DB.
-      const result = await UserModel.create({
+      const user = await UserModel.create({
         firstname: firstname,
         lastname: lastname,
         email: email,
+        password: hashedPassword
       });
-      const token = jwt.sign(
-        { email: result.email, id: result._id },
-        process.env.SECRET_KEY
-      );
-      res.status(201).json({ user: result, token: token });
+      const token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
+      res.status(201).json({ message: "user created", user: {email, firstname, lastname} });
     });
   } catch (error) {
     console.log(error);
@@ -42,22 +39,22 @@ const login = async (req, res) => {
     if (!existingUser) {
       return res.status(400).json({ message: "User  does not exist" });
     }
+
     bcrypt.compare(
       password,
       existingUser.password,
       function (err, matchedpassword) {
         if (!matchedpassword) {
-          return res.status(400).json({ mesaage: "Invalid credentials" });
+          return res
+            .status(400)
+            .json({ message: "Invalid credentials" });
         }
 
         const token = jwt.sign(
-          {
-            email: existingUser.email,
-            id: existingUser._id,
-          },
+          { email: existingUser.email },
           process.env.SECRET_KEY
         );
-        res.status(200).json({ user: existingUser, token: token });
+        res.status(200).json({ message: "user logged in", existingUser: email, token  });
       }
     );
   } catch (error) {
