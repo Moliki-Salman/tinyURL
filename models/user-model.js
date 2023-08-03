@@ -20,10 +20,11 @@ const UserSchema = new Schema(
       type: String,
       require: true,
     },
+     date: {
+    type: String,
+    default: Date.now,
   },
-  {
-    timestamp: true,
-  }
+  },
 );
 
 module.exports = mongoose.model("user", UserSchema);
