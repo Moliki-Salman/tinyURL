@@ -20,7 +20,6 @@ const signup = async (req, res) => {
         firstname: firstname,
         lastname: lastname,
         email: email,
-        password: hashedPassword,
       });
       const token = jwt.sign(
         { email: result.email, id: result._id },
