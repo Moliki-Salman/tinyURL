@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const UserModel = require("../models/user-model");
 const bcrypt = require("bcrypt");
 
+
 const signup = async (req, res) => {
   const { firstname, lastname, email, password } = req.body;
   try {
@@ -9,7 +10,6 @@ const signup = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: "user already exist" });
     }
-    // const hashedPassword = await bcrypt.hash(password, 10);
     bcrypt.hash(password, 10, async function (err, hashedPassword) {
       if (err) {
         throw new Error("error", { cause: err });
@@ -21,7 +21,7 @@ const signup = async (req, res) => {
         email: email,
         password: hashedPassword,
       });
-      // const token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
+
       function signInToken() {
         const token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
         res.status(201).json({
