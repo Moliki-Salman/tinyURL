@@ -19,13 +19,19 @@ const signup = async (req, res) => {
         firstname: firstname,
         lastname: lastname,
         email: email,
-        password: hashedPassword
+        password: hashedPassword,
       });
-      const token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
-      res.status(201).json({ message: "user created", user: {email, firstname, lastname} });
+      // const token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
+      function signInToken() {
+        const token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
+        res.status(201).json({
+          message: "successful",
+          user: { email, firstname, lastname, token },
+        });
+      }
+      signInToken();
     });
   } catch (error) {
-    console.log(error);
     res
       .status(500)
       .json({ message: "Internal Server error", error: JSON.stringify(error) });
@@ -45,16 +51,19 @@ const login = async (req, res) => {
       existingUser.password,
       function (err, matchedpassword) {
         if (!matchedpassword) {
-          return res
-            .status(400)
-            .json({ message: "Invalid credentials" });
+          return res.status(400).json({ message: "Invalid credentials" });
         }
-
-        const token = jwt.sign(
-          { email: existingUser.email },
-          process.env.SECRET_KEY
-        );
-        res.status(200).json({ message: "user logged in", existingUser: email, token  });
+        function signInToken() {
+          const token = jwt.sign(
+            { email: existingUser.email },
+            process.env.SECRET_KEY
+          );
+          res.status(201).json({
+            message: "successful",
+            existingUser: { email, token },
+          });
+        }
+        signInToken();
       }
     );
   } catch (error) {
