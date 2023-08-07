@@ -3,6 +3,42 @@ const UserModel = require("../models/user-model");
 const bcrypt = require("bcrypt");
 
 
+// const signup = async (req, res) => {
+//   const { firstname, lastname, email, password } = req.body;
+//   try {
+//     const existingUser = await UserModel.findOne({ email: email });
+//     if (existingUser) {
+//       return res.status(400).json({ message: "user already exist" });
+//     }
+//     bcrypt.hash(password, 10, async function (err, hashedPassword) {
+//       if (err) {
+//         throw new Error("error", { cause: err });
+//       }
+//       // Store hash in your password DB.
+//       const user = await UserModel.create({
+//         firstname: firstname,
+//         lastname: lastname,
+//         email: email,
+//         password: hashedPassword,
+//       });
+
+//       function signInToken() {
+//         const token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
+//         res.status(201).json({
+//           message: "successful",
+//           user: { email, firstname, lastname, token },
+//         });
+//       }
+//       signInToken();
+//     });
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({ message: "Internal Server error", error: JSON.stringify(error) });
+//   }
+// };
+
+
 const signup = async (req, res) => {
   const { firstname, lastname, email, password } = req.body;
   try {
@@ -10,26 +46,25 @@ const signup = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: "user already exist" });
     }
-    bcrypt.hash(password, 10, async function (err, hashedPassword) {
-      if (err) {
-        throw new Error("error", { cause: err });
-      }
-      // Store hash in your password DB.
-      const user = await UserModel.create({
-        firstname: firstname,
-        lastname: lastname,
-        email: email,
-        password: hashedPassword,
-      });
 
-      function signInToken() {
-        const token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
-        res.status(201).json({
-          message: "successful",
-          user: { email, firstname, lastname, token },
-        });
-      }
-      signInToken();
+    // Use async version of bcrypt.hash
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Store hash in your password DB and create the user
+    const user = await UserModel.create({
+      firstname: firstname,
+      lastname: lastname,
+      email: email,
+      password: hashedPassword,
+    });
+
+    // Generate and sign the token
+    const token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
+
+    // Respond with the token and user information
+    res.status(201).json({
+      message: "successful",
+      user: { email, firstname, lastname, token },
     });
   } catch (error) {
     res
