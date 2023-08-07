@@ -15,5 +15,4 @@ app.use("/", urlRoutes);
 
 const PORT = 3000
 app.listen(PORT, () => console.log(`app is runnning on port ${PORT}`));
-
 module.exports = app;
