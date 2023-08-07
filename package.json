@@ -6,7 +6,7 @@
   "scripts": {
     "start": " nodemon app.js",
     "test": "mocha",
-    "coverage": "nyc --reporter=text npm run test"
+    "coverage": "nyc --reporter=lcov --reporter=text npm run test"
   },
   "repository": {
     "type": "git",

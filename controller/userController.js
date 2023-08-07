@@ -16,17 +16,17 @@ const signup = async (req, res) => {
         throw new Error("error", { cause: err });
       }
       // Store hash in your password DB.
-      const result = await UserModel.create({
+      const user = await UserModel.create({
         firstname: firstname,
         lastname: lastname,
         email: email,
         password: hashedPassword,
       });
       const token = jwt.sign(
-        { email: result.email, id: result._id },
+        { email: user.email},
         process.env.SECRET_KEY
       );
-      res.status(201).json({ user: result, token: token });
+      res.status(201).json({ user, token});
     });
   } catch (error) {
     console.log(error);
