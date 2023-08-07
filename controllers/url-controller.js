@@ -1,14 +1,9 @@
-const config = require("config");
 const shortid = require("shortid");
 const validUrl = require("valid-url");
 const urlModel = require("../models/url-model");
 
 const createTinyUrl = async (req, res) => {
   const { longUrl } = req.body;
-  const rootUrl = config.get("rootUrl");
-  if (!validUrl.isUri(rootUrl)) {
-    return res.status(401).json("Root URL not valid");
-  }
   // create url code
   const urlCode = shortid.generate();
   // check long url
@@ -18,7 +13,7 @@ const createTinyUrl = async (req, res) => {
       if (url) {
         res.json(url);
       } else {
-        const shortUrl = rootUrl + "/" + urlCode;
+        const shortUrl = "http://localhost:3000" + "/" + urlCode;
         const userId = req.user.id;
         url = new urlModel({
           longUrl,
