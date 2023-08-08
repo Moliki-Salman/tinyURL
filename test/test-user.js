@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+
 let userModel = require("../model/userModel");
 const chai = require("chai");
 const chaiHttp = require("chai-http");
