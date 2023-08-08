@@ -5,6 +5,33 @@
 // const app = require("../app");
 // chai.should();
 
+chai.use(chaiHttp);
+// URL TEST: empty the database before url test is carried out
+describe("url", () => {
+  beforeEach(async () => {
+    await urlModel.deleteMany({});
+  });
+  
+  // test routes  to get all tiny urls
+  describe("GET url", () => {
+    it("it should GET all the urls that belongs to a user", async () => {
+      chai
+        .request(app)
+        .get("/")
+        .end((error, res) => {
+          res.should.have.status(200);
+          res.body.data.should.be.a("array");
+          res.body.data.length.should.be.eql(0);
+          res.should.have.property("_id");
+          res.should.have.property("longUrl");
+          res.should.have.property("shortUrl");
+          res.should.have.property("user");
+          res.should.have.property("urlCode");
+          done();
+        });
+    });
+  });
+
 // chai.use(chaiHttp);
 // // URL TEST: empty the database before url test is carried out
 // describe("url", () => {

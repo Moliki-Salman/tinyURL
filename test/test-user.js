@@ -1,3 +1,9 @@
+
+let userModel = require("../model/userModel");
+const chai = require("chai");
+const chaiHttp = require("chai-http");
+const app = require("../app");
+chai.should();
 // const mongoose = require("mongoose");
 // let userModel = require("../models/user-model");
 // const chai = require("chai");
@@ -5,37 +11,57 @@
 // const app = require("../app");
 // chai.should();
 
-// chai.use(chaiHttp);
-// // USER TEST: empty the database before user's test is carried out
-// describe("user", () => {
-//   beforeEach(async () => {
-//     await userModel.deleteMany({});
-//   });
-//   // test routes to signup user
-//   // describe("POST user", () => {
-//   //   // it("it should create new account for user", async () => {
-//   //   //   let user = {
-//   //   //     user: {
-//   //   //       firstname: "user's firtstname",
-//   //   //       lastname: "user's lastname",
-//   //   //       email: "user's email",
-//   //   //       password: "user's password",
-//   //   //     },
-//   //   //   };
+chai.use(chaiHttp);
+// USER TEST: empty the database before user's test is carried out
+describe("user", () => {
+  // beforeEach(async () => {
+  //   await userModel.deleteMany({});
+  // });
+  // test routes to signup user
+  describe("POST user", () => {
+    it("should create new account for user", async () => {
+      let user = {
+        firstname: "user's firtstname",
+        lastname: "user's lastname",
+        email: "user's email",
+        password: "user's password",
+      };
+  
+      chai
+        .request(app)
+        .post("/user/signup")
+        .send(user)
+        .end((error, res) => {
+          res.should.have.status(201);
+          res.body.user.should.be.a("object");
+          res.status.should.be.eql(201);
+          res.should.have.property("user");
+          // done();
+        });
+    });
 
-//   //   //   chai
-//   //   //     .request(app)
-//   //   //     .post("/user/signup")
-//   //   //     .send(user)
-//   //   //     .end((error, res) => {
-//   //   //       res.should.have.status(201);
-//   //   //       res.body.user.should.be.a("object");
-//   //   //       res.status.should.be.eql(201);
-//   //   //       res.should.have.property("user");
-//   //   //       done();
-//   //   //     });
-//   //   // });
-//   // });
+    it("should check for if user already exists", async () => {
+      let existingUser = {
+        user: {
+          firstname: "existuser's firtstname",
+          lastname: "existuser's lastname",
+          email: "existuser's email",
+          password: "existuser's password",
+        },
+      };
+      // Insert an existing user directly to the database
+      await userModel.create(existingUser);
+
+      chai
+        .request(app)
+        .post("/user/signup")
+        .send(existingUser)
+        .end((error, res) => {
+          res.should.have.status(400);
+          res.should.have.property("user already exist");
+        });
+    });
+  });
 
 //   // test routes to login user
 //   describe("POST user", () => {
@@ -47,19 +73,19 @@
 //         },
 //       };
 
-//       chai
-//         .request(app)
-//         .post("/user/login")
-//         .send(user)
-//         .end((error, res) => {
-//           res.should.have.status(200);
-//           res.body.should.be.a("object");
-//           res.status.should.be.eql(200);
-//           res.should.have.property("user");
-//           done();
-//         });
-//     });
-//   });
+      chai
+        .request(app)
+        .post("/user/login")
+        .send(user)
+        .end((error, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a("object");
+          res.status.should.be.eql(200);
+          res.should.have.property("user");
+          done();
+        });
+    });
+  });
 
 //   // test routes to delete user
 //   describe("DELETE user", () => {
@@ -68,16 +94,15 @@
 //         id: "user's id",
 //       };
 
-//       chai
-//         .request(app)
-//         .delete("/user/delete")
-//         .send(user)
-//         .end((error, res) => {
-//           console.log(error)
-//           res.should.have.status(200);
-//           res.body.should.be.a("object");
-//           res.status.should.be.eql(200);
-//         });
-//     });
-//   });
-// });
+      chai
+        .request(app)
+        .delete("/user/delete")
+        .send(user)
+        .end((error, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a("object");
+          res.status.should.be.eql(200);
+        });
+    });
+  });
+});
