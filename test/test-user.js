@@ -1,4 +1,5 @@
-const userModel = require("../model/userModel");
+const mongoose = require("mongoose")
+const userModel = require("../models/user-model");
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const app = require("../app");
@@ -8,9 +9,6 @@ chai.should();
 chai.use(chaiHttp);
 // USER TEST: empty the database before user's test is carried out
 describe("user", () => {
-  // beforeEach(async () => {
-  //   await userModel.deleteMany({});
-  // });
   // test routes to signup user
   describe("POST user", () => {
     it("should create new account for user", async () => {
