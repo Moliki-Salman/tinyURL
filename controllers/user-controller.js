@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
-const UserModel = require("../model/userModel");
+const UserModel = require("../models/user-model");
 const bcrypt = require("bcrypt");
-const userModel = require("../model/userModel");
+
 
 const signup = async (req, res) => {
   const { firstname, lastname, email, password } = req.body;
@@ -10,7 +10,6 @@ const signup = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: "user already exist" });
     }
-    // const hashedPassword = await bcrypt.hash(password, 10);
     bcrypt.hash(password, 10, async function (err, hashedPassword) {
       if (err) {
         throw new Error("error", { cause: err });
@@ -22,14 +21,17 @@ const signup = async (req, res) => {
         email: email,
         password: hashedPassword,
       });
-      const token = jwt.sign(
-        { email: user.email},
-        process.env.SECRET_KEY
-      );
-      res.status(201).json({ user, token});
+
+      function signInToken() {
+        const token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
+        res.status(201).json({
+          message: "successful",
+          user: { email, firstname, lastname, token },
+        });
+      }
+      signInToken();
     });
   } catch (error) {
-    console.log(error);
     res
       .status(500)
       .json({ message: "Internal Server error", error: JSON.stringify(error) });
@@ -43,22 +45,25 @@ const login = async (req, res) => {
     if (!existingUser) {
       return res.status(400).json({ message: "User  does not exist" });
     }
+
     bcrypt.compare(
       password,
       existingUser.password,
       function (err, matchedpassword) {
         if (!matchedpassword) {
-          return res.status(400).json({ mesaage: "Invalid credentials" });
+          return res.status(400).json({ message: "Invalid credentials" });
         }
-
-        const token = jwt.sign(
-          {
-            email: existingUser.email,
-            id: existingUser._id,
-          },
-          process.env.SECRET_KEY
-        );
-        res.status(200).json({ user: existingUser, token: token });
+        function signInToken() {
+          const token = jwt.sign(
+            { email: existingUser.email },
+            process.env.SECRET_KEY
+          );
+          res.status(201).json({
+            message: "successful",
+            existingUser: { email, token },
+          });
+        }
+        signInToken();
       }
     );
   } catch (error) {

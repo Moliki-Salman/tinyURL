@@ -20,11 +20,11 @@ const UserSchema = new Schema(
       type: String,
       require: true,
     },
-    url: { type: Schema.Types.ObjectId, ref: "url" },
+     date: {
+    type: String,
+    default: Date.now,
   },
-  {
-    timestamp: true,
-  }
+  },
 );
 
 module.exports = mongoose.model("user", UserSchema);
