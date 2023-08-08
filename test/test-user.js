@@ -1,15 +1,9 @@
-
-let userModel = require("../model/userModel");
+const userModel = require("../model/userModel");
 const chai = require("chai");
 const chaiHttp = require("chai-http");
 const app = require("../app");
 chai.should();
-// const mongoose = require("mongoose");
-// let userModel = require("../models/user-model");
-// const chai = require("chai");
-// const chaiHttp = require("chai-http");
-// const app = require("../app");
-// chai.should();
+
 
 chai.use(chaiHttp);
 // USER TEST: empty the database before user's test is carried out
@@ -63,15 +57,15 @@ describe("user", () => {
     });
   });
 
-//   // test routes to login user
-//   describe("POST user", () => {
-//     it("it should log in excisting user", async () => {
-//       let user = {
-//         user: {
-//           email: "user's email",
-//           password: "user's password",
-//         },
-//       };
+  // test routes to login user
+  describe("POST user", () => {
+    it("it should log in excisting user", async () => {
+      let user = {
+        user: {
+          email: "user's email",
+          password: "user's password",
+        },
+      };
 
       chai
         .request(app)
@@ -88,11 +82,11 @@ describe("user", () => {
   });
 
 //   // test routes to delete user
-//   describe("DELETE user", () => {
-//     it("it should delete a user's account", async () => {
-//       let user = {
-//         id: "user's id",
-//       };
+  describe("DELETE user", () => {
+    it("it should delete a user's account", async () => {
+      let user = {
+        id: "user's id",
+      };
 
       chai
         .request(app)
