@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">36.58% </span>
+                <span class="strong">48.78% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>15/41</span>
+                <span class='fraction'>20/41</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20% </span>
+                <span class="strong">30% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/10</span>
+                <span class='fraction'>3/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">60% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/5</span>
+                <span class='fraction'>3/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">36.58% </span>
+                <span class="strong">48.78% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>15/41</span>
+                <span class='fraction'>20/41</span>
             </div>
         
             
@@ -161,47 +161,47 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -248,13 +248,13 @@ const signup = async (req, res) =&gt; {
   const { firstname, lastname, email, password } = req.body;
   try {
     const existingUser = await UserModel.findOne({ email: email });
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (existingUser) {
-<span class="cstat-no" title="statement not covered" >      return res.status(400).json({ message: "user already exist" });</span>
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (existingUser) {
+      return res.status(400).json({ message: "user already exist" });
     }
     // const hashedPassword = await bcrypt.hash(password, 10);
-    bcrypt.hash(password, 10, async function (err, hashedPassword) {
-      <span class="missing-if-branch" title="else path not taken" >E</span>if (err) {
-        throw new Error("error", { cause: err });
+<span class="cstat-no" title="statement not covered" >    bcrypt.hash(password, 10, <span class="fstat-no" title="function not covered" >as</span>ync function (err, hashedPassword) {</span>
+<span class="cstat-no" title="statement not covered" >      if (err) {</span>
+<span class="cstat-no" title="statement not covered" >        throw new Error("error", { cause: err });</span>
       }
       // Store hash in your password DB.
       const user = <span class="cstat-no" title="statement not covered" >await UserModel.create({</span>
@@ -277,19 +277,19 @@ const signup = async (req, res) =&gt; {
   }
 };
 &nbsp;
-const login = <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
-  const { email, password } = <span class="cstat-no" title="statement not covered" >req.body;</span>
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const existingUser = <span class="cstat-no" title="statement not covered" >await UserModel.findOne({ email: email });</span>
-<span class="cstat-no" title="statement not covered" >    if (!existingUser) {</span>
+const login = async (req, res) =&gt; {
+  const { email, password } = req.body;
+  try {
+    const existingUser = await UserModel.findOne({ email: email });
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (!existingUser) {
 <span class="cstat-no" title="statement not covered" >      return res.status(400).json({ message: "User  does not exist" });</span>
     }
-<span class="cstat-no" title="statement not covered" >    bcrypt.compare(</span>
+    bcrypt.compare(
       password,
       existingUser.password,
-<span class="fstat-no" title="function not covered" >      fu</span>nction (err, matchedpassword) {
-<span class="cstat-no" title="statement not covered" >        if (!matchedpassword) {</span>
-<span class="cstat-no" title="statement not covered" >          return res.status(400).json({ mesaage: "Invalid credentials" });</span>
+      function (err, matchedpassword) {
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (!matchedpassword) {
+          return res.status(400).json({ mesaage: "Invalid credentials" });
         }
 &nbsp;
         const token = <span class="cstat-no" title="statement not covered" >jwt.sign(</span>
@@ -334,7 +334,7 @@ module.exports = { signup, login, deleteUser };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-08-07T22:03:34.410Z
+                at 2023-08-08T10:00:45.076Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
