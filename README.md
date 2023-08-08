@@ -24,7 +24,9 @@ Clone this repository and run locally
 git clone https://github.com/Moliki-Salman/tinyURL.git
 ```
 
-
+Mocha Reference: https://mochajs.org/
+Chai Reference: https://www.chaijs.com/
+Node Download Link: https://nodejs.org/es/
 Install mongoDB database locally or connect with mongoDB Atlas database.
 
 Run npm install to install all dependencies.
@@ -34,15 +36,10 @@ Run npm install to install all dependencies.
 
 All dependencies  for the project can be installed by running: 
 
-1. Set up a new npm package.
+1. install node from the website and download node for your device type:
 ```bash
-$ npm init
+$  https://nodejs.org/en
 ```
-2. Install express as the web framework.
-```bash
-$ npm install express
-```
-
 
 ## Testing 
  
