@@ -8,7 +8,7 @@ const signup = async (req, res) => {
   try {
     const existingUser = await UserModel.findOne({ email: email });
     if (existingUser) {
-      return res.status(400).json({ message: "user already exist" });
+      return res.status(400).json({ message: "User already exist" });
     }
     bcrypt.hash(password, 10, async function (err, hashedPassword) {
       if (err) {
@@ -31,6 +31,8 @@ const signup = async (req, res) => {
       }
       signInToken();
     });
+
+    
   } catch (error) {
     res
       .status(500)
