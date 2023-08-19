@@ -1,4 +1,4 @@
-const userModel = require("../models/user-model")
+const userModel = require("../models/user-model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const chai = require("chai");
@@ -6,7 +6,6 @@ const expect = chai.expect;
 const chaiHttp = require("chai-http");
 const app = require("../app");
 chai.use(chaiHttp);
-beforeEach()
 
 //signup a user, create the user and authenticate the user
 describe("signup up a  new user", async function () {
@@ -72,13 +71,12 @@ describe("signup up a  new user", async function () {
   });
 
   it("should not register an existing user", async function () {
-   
     const user = {
       firstname: "Morayo",
       lastname: "Afolabi",
       email: "morayo@gmail.com",
       password: "1234",
-    }
+    };
     await userModel.findOne({ email: "kapo@gmail.com" });
     chai
       .request(app)
@@ -89,5 +87,27 @@ describe("signup up a  new user", async function () {
         expect(res.status).to.be.equal(400);
         expect(res.body).to.have.property("message", "User already exist");
       });
+  });
+
+  it("should handle internal server error", async function () {
+    let user = {
+      firstname: "Morayo",
+      lastname: "Afolabi",
+      email: "morayo@gmail.com",
+      password: "1234",
+    };
+
+    userModel.findOne = () => {
+      throw new Error("Database error");
+    };
+    chai
+    .request(app)
+    .post("/user/signup")
+    .send(user)
+    .end((err, res) => {
+      expect(res).to.have.status(500);
+      expect(res.body).to.have.property("message", "Internal Server error");
+      expect(res.body).to.have.property('error')
+    });
   });
 });
