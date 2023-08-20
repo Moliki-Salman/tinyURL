@@ -21,18 +21,12 @@ const signup = async (req, res) => {
         email: email,
         password: hashedPassword,
       });
-
-      function signInToken() {
         const token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
         res.status(201).json({
           message: "successful",
           user: { email, firstname, lastname, token },
         });
-      }
-      signInToken();
-    });
-
-    
+      });
   } catch (error) {
     res
       .status(500)
@@ -55,16 +49,13 @@ const login = async (req, res) => {
         if (!matchedpassword) {
           return res.status(400).json({ message: "Invalid credentials" });
         }
-        function signInToken() {
-          const token = jwt.sign(
-            { email: existingUser.email },process.env.SECRET_KEY);
+          const token = jwt.sign({ email: existingUser.email },process.env.SECRET_KEY);
             res.status(201).json({
             message: "successful",
             existingUser: { email, token },
           });
         }
-        signInToken();
-      }
+       
     );
   } catch (error) {
     console.log(error);

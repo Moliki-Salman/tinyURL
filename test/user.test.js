@@ -37,9 +37,9 @@ describe("signup a new user", async function () {
 
   it("should register a new user with jwt", async function () {
     let user = {
-      firstname: "Morayo",
-      lastname: "Afolabi",
-      email: "morayo@gmail.com",
+      firstname: "Kolade",
+      lastname: "Bisiri",
+      email: "kolade@gmail.com",
       password: "1234",
     };
 
@@ -61,7 +61,8 @@ describe("signup a new user", async function () {
         .send(user)
         .end((err, res) => {
           expect(res.body).to.be.a("object");
-          expect(res.status).to.be.equal(201);
+          expect(res).to.have.status(201);
+          expect(res.body).to.have.property("user");
           expect(res.body).to.have.property("message", "successful");
           expect(res.body).to.have.property("token");
           expect(token).to.a("string");
@@ -84,27 +85,34 @@ describe("signup a new user", async function () {
       .send(user)
       .end((err, res) => {
         expect(res.body).to.be.a("object");
-        expect(res.status).to.be.equal(400);
+        expect(res).to.have.status(400);
         expect(res.body).to.have.property("message", "User already exist");
       });
   });
 
   it("should handle internal server error", async function () {
     let user = {
-      firstname: "Morayo",
-      lastname: "Afolabi",
-      email: "morayo@gmail.com",
+      firstname: "new",
+      lastname: "new",
+      email: "o@gmail.com",
       password: "1234",
     };
-
-    userModel.findOne = function () {
-      throw new Error("Database error");
-    };
+    bcrypt.hash(user.password, async function (err, hashedPassword) {
+      await userModel.create({
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        password: hashedPassword,
+      });
+      return err;
+    });
+    const token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
     chai
       .request(app)
       .post("/user/signup")
-      .send(user)
+      .send()
       .end((err, res) => {
+        expect(res.body).to.be.a("object");
         expect(res).to.have.status(500);
         expect(res.body).to.have.property("message", "Internal Server error");
         expect(res.body).to.have.property("error");
@@ -135,13 +143,74 @@ describe("login a user", async function () {
         .send(user)
         .end((err, res) => {
           expect(res.body).to.be.a("object");
-          expect(res.status).to.be.equal(400);
+          expect(res).to.have.status(400);
           expect(res.body).to.have.property("message", "User  does not exist");
         });
     });
   });
 
   it("should login in a user with the correct password", async function () {
-    
-  })
-});
+    // let user = {
+    //   firstname: "Aisha",
+    //   lastname: "Gambari",
+    //   email: "aisha@gmail.com",
+    //   password: "4678",
+    // };
+
+    // bcrypt.hash(user.password, 10, async function (err, hashedPassword) {
+    //   if (err) {
+    //     throw new Error("error", { cause: err });
+    //   }
+    //   await userModel.create({
+    //     firstname: user.firstname,
+    //     lastname: user.lastname,
+    //     email: user.email,
+    //     password: hashedPassword,
+    //   });
+    //   const token = jwt.sign({ email: newUser.email }, process.env.SECRET_KEY);
+    //   chai
+    //     .request(app)
+    //     .post("/user/signup")
+    //     .send(user)
+    //     .end((err, res) => {
+    //       expect(res.body).to.be.a("object");
+    //       expect(res).to.have.status(201);
+    //       expect(res.body).to.have.property("user");
+    //       expect(res.body).to.have.property("message", "successful");
+    //       expect(res.body).to.have.property("token");
+    //       expect(token).to.a("string");
+    //       expect(res.body.err).to.be.equal(null), 
+    //       expect(token).to.not.be.empty;
+    //     });
+    // });
+
+    let user = userModel.findOne({ email: "morayo@gmail.com", password: "1234",})
+    let existingUser = {
+      email: "morayo@gmail.com",
+      password: "1234",
+    };
+  
+    await userModel.findOne({ email: "morayo@gmail.com"});
+    bcrypt.compare(
+      user.Password,
+      existingUser.password,
+      function (err, matchedpassword) {})
+        const token = jwt.sign(
+          { email: existingUser.email },
+          process.env.SECRET_KEY
+        );
+
+        chai
+          .request(app)
+          .post("/user/login")
+          .send(existingUser)
+          .end((err, res) => {
+            expect(res.body).to.be.a("object");
+            expect(res).to.have.status(201);
+            expect(res.body).to.have.property("existingUser");
+            expect(res.body).to.have.property("message", "successful");
+            expect(token).to.a("string");
+            expect(token).to.not.be.empty;
+          });
+      });
+  });
