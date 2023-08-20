@@ -112,33 +112,36 @@ describe("signup a new user", async function () {
   });
 });
 
-// describe("login a user", async function () {
-//   /*
-//   declare a user  and throw error if user email does not exist
-//   create a user and compare password with data base password, signin user if password is matched 
-//   test that throws error if the password is not matched 
-//   check for server error
-//    */
-//   it("should check if user already exist", async function () {
-//     const user = {
-//       firstname: "Gambari",
-//       lastname: "Aishah",
-//       email: "gambari@gmail.com",
-//       password: "1234",
-//     };
+describe("login a user", async function () {
+  /*
+  declare a user  and throw error if user email does not exist
+  create a user and compare password with data base password, signin user if password is matched 
+  test that throws error if the password is not matched 
+  check for server error
+   */
+  it("should check if user already exist", async function () {
+    const user = {
+      email: "userdoesnotexist@gmail.com",
+      password: "1234",
+    };
+    bcrypt.hash(user.password, 10, async function (err, hashedPassword) {
+      if (err) {
+        throw new Error("error", { cause: err });
+      }
+      await userModel.findOne({ email: "userdoesnotexist@gmail.com" });
+      chai
+        .request(app)
+        .post("/user/login")
+        .send(user)
+        .end((err, res) => {
+          expect(res.body).to.be.a("object");
+          expect(res.status).to.be.equal(400);
+          expect(res.body).to.have.property("message", "User  does not exist");
+        });
+    });
+  });
 
-//      bcrypt.hash(user.password, 10, async function (err, hashedPassword) {
-//       if (err) {
-//         throw new Error("error", { cause: err });
-//       }
-//       await userModel.create({
-//         firstname: user.firstname,
-//         lastname: user.lastname,
-//         email: user.email,
-//         password: hashedPassword,
-//       });
-  
+  it("should login in a user with the correct password", async function () {
     
-//   });
-// })
-// })
+  })
+});
