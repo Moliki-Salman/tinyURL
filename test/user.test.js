@@ -150,46 +150,11 @@ describe("login a user", async function () {
   });
 
   it("should login in a user with the correct password", async function () {
-    // let user = {
-    //   firstname: "Aisha",
-    //   lastname: "Gambari",
-    //   email: "aisha@gmail.com",
-    //   password: "4678",
-    // };
-
-    // bcrypt.hash(user.password, 10, async function (err, hashedPassword) {
-    //   if (err) {
-    //     throw new Error("error", { cause: err });
-    //   }
-    //   await userModel.create({
-    //     firstname: user.firstname,
-    //     lastname: user.lastname,
-    //     email: user.email,
-    //     password: hashedPassword,
-    //   });
-    //   const token = jwt.sign({ email: newUser.email }, process.env.SECRET_KEY);
-    //   chai
-    //     .request(app)
-    //     .post("/user/signup")
-    //     .send(user)
-    //     .end((err, res) => {
-    //       expect(res.body).to.be.a("object");
-    //       expect(res).to.have.status(201);
-    //       expect(res.body).to.have.property("user");
-    //       expect(res.body).to.have.property("message", "successful");
-    //       expect(res.body).to.have.property("token");
-    //       expect(token).to.a("string");
-    //       expect(res.body.err).to.be.equal(null), 
-    //       expect(token).to.not.be.empty;
-    //     });
-    // });
-
     let user = userModel.findOne({ email: "morayo@gmail.com", password: "1234",})
     let existingUser = {
       email: "morayo@gmail.com",
       password: "1234",
     };
-  
     await userModel.findOne({ email: "morayo@gmail.com"});
     bcrypt.compare(
       user.Password,
@@ -199,7 +164,6 @@ describe("login a user", async function () {
           { email: existingUser.email },
           process.env.SECRET_KEY
         );
-
         chai
           .request(app)
           .post("/user/login")
