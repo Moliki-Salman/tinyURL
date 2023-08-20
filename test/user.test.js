@@ -8,7 +8,7 @@ const app = require("../app");
 chai.use(chaiHttp);
 
 //signup a user, create the user and authenticate the user
-describe("signup up a  new user", async function () {
+describe("signup a new user", async function () {
   it("should create a new user ", function () {
     let user = {
       firstname: "Morayo",
@@ -64,20 +64,20 @@ describe("signup up a  new user", async function () {
           expect(res.status).to.be.equal(201);
           expect(res.body).to.have.property("message", "successful");
           expect(res.body).to.have.property("token");
-          expect(res.body.err).to.be.equal(null), expect(token).to.a("string");
-          expect(token).to.not.be.empty;
+          expect(token).to.a("string");
+          expect(res.body.err).to.be.equal(null), expect(token).to.not.be.empty;
         });
     });
   });
 
   it("should not register an existing user", async function () {
-    const user = {
-      firstname: "Morayo",
-      lastname: "Afolabi",
+    let user = {
+      firstname: "rayo",
+      lastname: "labi",
       email: "morayo@gmail.com",
       password: "1234",
     };
-    await userModel.findOne({ email: "kapo@gmail.com" });
+    await userModel.findOne({ email: "morayo@gmail.com" });
     chai
       .request(app)
       .post("/user/signup")
@@ -97,17 +97,48 @@ describe("signup up a  new user", async function () {
       password: "1234",
     };
 
-    userModel.findOne = () => {
+    userModel.findOne = function () {
       throw new Error("Database error");
     };
     chai
-    .request(app)
-    .post("/user/signup")
-    .send(user)
-    .end((err, res) => {
-      expect(res).to.have.status(500);
-      expect(res.body).to.have.property("message", "Internal Server error");
-      expect(res.body).to.have.property('error')
-    });
+      .request(app)
+      .post("/user/signup")
+      .send(user)
+      .end((err, res) => {
+        expect(res).to.have.status(500);
+        expect(res.body).to.have.property("message", "Internal Server error");
+        expect(res.body).to.have.property("error");
+      });
   });
 });
+
+// describe("login a user", async function () {
+//   /*
+//   declare a user  and throw error if user email does not exist
+//   create a user and compare password with data base password, signin user if password is matched 
+//   test that throws error if the password is not matched 
+//   check for server error
+//    */
+//   it("should check if user already exist", async function () {
+//     const user = {
+//       firstname: "Gambari",
+//       lastname: "Aishah",
+//       email: "gambari@gmail.com",
+//       password: "1234",
+//     };
+
+//      bcrypt.hash(user.password, 10, async function (err, hashedPassword) {
+//       if (err) {
+//         throw new Error("error", { cause: err });
+//       }
+//       await userModel.create({
+//         firstname: user.firstname,
+//         lastname: user.lastname,
+//         email: user.email,
+//         password: hashedPassword,
+//       });
+  
+    
+//   });
+// })
+// })

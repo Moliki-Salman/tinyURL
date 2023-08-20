@@ -57,10 +57,8 @@ const login = async (req, res) => {
         }
         function signInToken() {
           const token = jwt.sign(
-            { email: existingUser.email },
-            process.env.SECRET_KEY
-          );
-          res.status(201).json({
+            { email: existingUser.email },process.env.SECRET_KEY);
+            res.status(201).json({
             message: "successful",
             existingUser: { email, token },
           });
