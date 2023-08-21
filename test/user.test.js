@@ -121,12 +121,6 @@ describe("signup a new user", async function () {
 });
 
 describe("login a user", async function () {
-  /*
-  declare a user  and throw error if user email does not exist
-  create a user and compare password with data base password, signin user if password is matched 
-  test that throws error if the password is not matched 
-  check for server error
-   */
   it("should check if user already exist", async function () {
     const user = {
       email: "userdoesnotexist@gmail.com",
@@ -150,31 +144,94 @@ describe("login a user", async function () {
   });
 
   it("should login in a user with the correct password", async function () {
-    let user = userModel.findOne({ email: "morayo@gmail.com", password: "1234",})
-    let existingUser = {
+    let existingUser = userModel.findOne({ email: "morayo@gmail.com", password: "1234"})
+    let user = {
       email: "morayo@gmail.com",
       password: "1234",
     };
     await userModel.findOne({ email: "morayo@gmail.com"});
     bcrypt.compare(
-      user.Password,
-      existingUser.password,
+      existingUser.Password,
+      user.password,
       function (err, matchedpassword) {})
         const token = jwt.sign(
-          { email: existingUser.email },
+          { email: user.email },
           process.env.SECRET_KEY
         );
         chai
           .request(app)
           .post("/user/login")
-          .send(existingUser)
+          .send(user)
           .end((err, res) => {
             expect(res.body).to.be.a("object");
             expect(res).to.have.status(201);
-            expect(res.body).to.have.property("existingUser");
+            expect(res.body).to.have.property("user");
             expect(res.body).to.have.property("message", "successful");
             expect(token).to.a("string");
             expect(token).to.not.be.empty;
           });
       });
+
+    it("should not login a user with an incorrect password", async function () {
+      let existingUser = userModel.findOne({ email: "morayo@gmail.com", password: "1234"})
+      let user = {
+      email: "morayo@gmail.com",
+      password: "1432",
+    };
+    await userModel.findOne({ email: "morayo@gmail.com"});
+    bcrypt.compare(
+      existingUser.Password,
+      user.password,
+      function (err, matchedpassword) {})
+        const token = jwt.sign(
+          { email: user.email },
+          process.env.SECRET_KEY
+        );
+        chai
+          .request(app)
+          .post("/user/login")
+          .send(user)
+          .end((err, res) => {
+            expect(res.body).to.be.a("object");
+            expect(res).to.have.status(400);  
+            expect(res.body).to.have.property("message", "Invalid credentials")
+          });
+    })
+    // it("should throw err", async function () {
+    //   let existingUser = userModel.findOne({ email: "morayo@gmail.com", password: "1234" })
+      
+    //   let user = {
+    //   email: "morayo@gmail.com",
+    //   password: "1432",
+    // };
+    // await userModel.find({email: "morayo@gmail.com"});
+  
+    // bcrypt.compare(
+    //   existingUser.Password,
+    //   user.password,
+    //  )
+    //   const token = jwt.sign(
+    //       { email: user.email },
+    //       process.env.SECRET_KEY
+    //     );
+    //     chai
+    //       .request(server)
+    //       .post("/user/")
+    //       .send(user)
+    //       .end((err, res) => {
+    //         expect(res.body).to.be.a("object");
+    //         expect(res).to.have.status(500);  
+    //         // expect(res).to.have.property("message", "Invalid credentials")
+    //         // expect(res.body).to.have.property("error");
+    //       });
+    // })
+    
+    
   });
+
+describe("delete a user", async function (){
+  /*
+  
+   */
+  it
+})
