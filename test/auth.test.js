@@ -24,7 +24,13 @@ describe("authenticate a user", async function () {
     let decodedToken = jwt.verify(token, process.env.SECRET_KEY);
     decodedToken = req.user;
 
-    expect(decodedToken).to.be.a("object");
+    expect(req.user).to.be.a("object");
     expect(req.user).to.be.equal(decodedToken);
   });
+
 });
+
+
+
+
+

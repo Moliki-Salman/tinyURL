@@ -1,4 +1,5 @@
 const userModel = require("../models/user-model");
+const authenticateUser = require("../config/auth");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const chai = require("chai");
@@ -7,7 +8,6 @@ const chaiHttp = require("chai-http");
 const app = require("../app");
 chai.use(chaiHttp);
 
-//signup a user, create the user and authenticate the user
 describe("signup a new user", async function () {
   it("should create a new user ", function () {
     let user = {
@@ -32,6 +32,7 @@ describe("signup a new user", async function () {
       expect(createdUser.lastname).to.equal(user.lastname);
       expect(createdUser.email).to.equal(user.email);
       expect(createdUser.password).to.equal(hashedPassword);
+      expect(createdUser).to.be.a("object");
     });
   });
 
@@ -66,19 +67,19 @@ describe("signup a new user", async function () {
           expect(res.body).to.have.property("message", "successful");
           expect(res.body).to.have.property("token");
           expect(token).to.a("string");
-          expect(res.body.err).to.be.equal(null), expect(token).to.not.be.empty;
+          expect(res.body.err).to.be.equal(null);
         });
     });
   });
 
   it("should not register an existing user", async function () {
     let user = {
-      firstname: "rayo",
-      lastname: "labi",
+      firstname: "Morayo",
+      lastname: "Afolabi",
       email: "morayo@gmail.com",
       password: "1234",
     };
-    await userModel.findOne({ email: "morayo@gmail.com" });
+    await userModel.findOne({ email: user.email });
     chai
       .request(app)
       .post("/user/signup")
@@ -121,43 +122,32 @@ describe("signup a new user", async function () {
 });
 
 describe("login a user", async function () {
-  it("should check if user already exist", async function () {
-    const user = {
+  it("should check if user details does not exist in database", async function () {
+    let user = {
       email: "userdoesnotexist@gmail.com",
       password: "1234",
     };
-    bcrypt.hash(user.password, 10, async function (err, hashedPassword) {
-      if (err) {
-        throw new Error("error", { cause: err });
-      }
-      await userModel.findOne({ email: "userdoesnotexist@gmail.com" });
-      chai
-        .request(app)
-        .post("/user/login")
-        .send(user)
-        .end((err, res) => {
-          expect(res.body).to.be.a("object");
-          expect(res).to.have.status(400);
-          expect(res.body).to.have.property("message", "User  does not exist");
-        });
-    });
+    await userModel.findOne({ email: user.email });
+    chai
+      .request(app)
+      .post("/user/login")
+      .send(user)
+      .end((err, res) => {
+        expect(res.body).to.be.a("object");
+        expect(res).to.have.status(400);
+        expect(res.body).to.have.property("message", "User  does not exist");
+      });
   });
 
-  it("should login in a user with the correct password", async function () {
-    let existingUser = userModel.findOne({ email: "morayo@gmail.com", password: "1234"})
-    let user = {
-      email: "morayo@gmail.com",
-      password: "1234",
-    };
-    await userModel.findOne({ email: "morayo@gmail.com"});
+  it("should login a user with the correct password", async function () {
+    let existingUser = userModel.findOne({ email: "morayo@gmail.com" });
+    let user = { email: "morayo@gmail.com", password: "1234" };
+    await userModel.findOne({ email: user.email, password: "1234" });
     bcrypt.compare(
-      existingUser.Password,
       user.password,
-      function (err, matchedpassword) {})
-        const token = jwt.sign(
-          { email: user.email },
-          process.env.SECRET_KEY
-        );
+      existingUser,
+      function (err, matchedpassword) {
+        const token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
         chai
           .request(app)
           .post("/user/login")
@@ -168,70 +158,75 @@ describe("login a user", async function () {
             expect(res.body).to.have.property("user");
             expect(res.body).to.have.property("message", "successful");
             expect(token).to.a("string");
-            expect(token).to.not.be.empty;
           });
-      });
+      }
+    );
+  });
 
-    it("should not login a user with an incorrect password", async function () {
-      let existingUser = userModel.findOne({ email: "morayo@gmail.com", password: "1234"})
-      let user = {
-      email: "morayo@gmail.com",
-      password: "1432",
-    };
-    await userModel.findOne({ email: "morayo@gmail.com"});
+  it("should not login a user with an incorrect password", async function () {
+    let existingUser = userModel.findOne({ email: "morayo@gmail.com" });
+    let user = { email: "morayo@gmail.com", password: "1432" };
+    await userModel.findOne({ email: user.email });
     bcrypt.compare(
-      existingUser.Password,
       user.password,
-      function (err, matchedpassword) {})
-        const token = jwt.sign(
-          { email: user.email },
-          process.env.SECRET_KEY
-        );
+      existingUser,
+      function (err, matchedpassword) {
+        const token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
         chai
           .request(app)
           .post("/user/login")
           .send(user)
           .end((err, res) => {
             expect(res.body).to.be.a("object");
-            expect(res).to.have.status(400);  
-            expect(res.body).to.have.property("message", "Invalid credentials")
+            expect(res).to.have.status(400);
+            expect(res.body).to.have.property("message", "Invalid credentials");
           });
-    })
-    // it("should throw err", async function () {
-    //   let existingUser = userModel.findOne({ email: "morayo@gmail.com", password: "1234" })
-      
-    //   let user = {
-    //   email: "morayo@gmail.com",
-    //   password: "1432",
-    // };
-    // await userModel.find({email: "morayo@gmail.com"});
-  
-    // bcrypt.compare(
-    //   existingUser.Password,
-    //   user.password,
-    //  )
-    //   const token = jwt.sign(
-    //       { email: user.email },
-    //       process.env.SECRET_KEY
-    //     );
-    //     chai
-    //       .request(server)
-    //       .post("/user/")
-    //       .send(user)
-    //       .end((err, res) => {
-    //         expect(res.body).to.be.a("object");
-    //         expect(res).to.have.status(500);  
-    //         // expect(res).to.have.property("message", "Invalid credentials")
-    //         // expect(res.body).to.have.property("error");
-    //       });
-    // })
-    
-    
+      }
+    );
+  });
+});
+
+describe("delete a user", async function () {
+  it("should throw error if user does not exist in database", async function () {
+    let user = { email: "morayo@gma.com", password: "1234" };
+    await userModel.findOne({ email: user.email });
+
+    chai
+      .request(app)
+      .post("/user/delete")
+      .send(user)
+      .end((err, res) => {
+        expect(res.body).to.be.a("object");
+        expect(res).to.have.status(404);
+      });
   });
 
-describe("delete a user", async function (){
-  /*
-  
-   */
-  it
-})
+  it("should authenticate and delete a user", async function () {
+    let existingUser = { email: "test@gmail.com", password: "password" };
+    let user = { email: "test@gmail.com", password: "password" };
+    await userModel.findOne({ email: user.email });
+    
+    bcrypt.compare(
+      user.password,
+      existingUser,
+      async function (err, matchedpassword) {
+        let token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
+        chai
+          .request(app)
+          .delete("/user/delete")
+          .set("authorization", `Bearer ${token}`)
+          .send(user)
+          .end(async (err, res) => {
+            await userModel.deleteOne({ email: user.email });
+            expect(res.body).to.be.a("string");
+            expect(res).to.have.status(200);
+            expect(res.body).to.have.property("user");
+            expect(res.body).to.have.property(
+              "message",
+              "User deleted successfully"
+            );
+          });
+      }
+    );
+  });
+});

@@ -26,6 +26,8 @@ const signup = async (req, res) => {
         user: { email, firstname, lastname, token },
       });
     });
+
+
   } catch (error) {
     res
       .status(500)
@@ -50,7 +52,11 @@ const login = async (req, res) => {
         message: "successful",
         user: { email, token },
       });
-    });
+      
+    })
+     
+
+
   } catch (error) {
     res.status(500).json({
       message: "Internal Server error",
@@ -66,7 +72,7 @@ const deleteUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    await user.deleteOne();
+    await user.deleteOne({ email });
     res.status(200).json({ message: "User deleted successfully", user });
   } catch (error) {
     res
