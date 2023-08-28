@@ -27,7 +27,7 @@ const createTinyUrl = async (req, res) => {
       res.status(500).json("Internal Server error");
     }
   } else {
-    res.status(401).json("long url not valid");
+    res.status(401).json("long url is not valid");
   }
 };
 
