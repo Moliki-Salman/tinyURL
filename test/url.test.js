@@ -45,13 +45,36 @@ describe("url collections", async function () {
     const user = { email: "newUser2", password: "1234" };
     const token = jwt.sign(user, process.env.SECRET_KEY);
     const longUrl = "invalidurl";
-     const response = await chai
+    const res = await chai
       .request(app)
-      .post('/')
-      .set('Authorization', `Bearer ${token}`)
+      .post("/")
+      .set("Authorization", `Bearer ${token}`)
       .send({ longUrl });
 
-    expect(response).to.have.status(401);
-    expect(response.body).to.equal('long url is not valid');
+    expect(res).to.have.status(401);
+    expect(res.body).to.equal("long url is not valid");
+  });
+
+  it("should handle internal server error", async function () {
+    const user = { email: "newUser2", password: "1234" };
+    const token = jwt.sign(user, process.env.SECRET_KEY);
+    const longUrl = "https://www.npmjs.com/package/bcrypt";
+
+    // Temporarily overwrite the findOne function to simulate an error
+    const originalFindOne = urlModel.findOne;
+    urlModel.findOne = async () => {
+      throw new Error("Database error");
+    };
+
+    const res = await chai
+      .request(app)
+      .post("/")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ longUrl });
+    // Restore the original findOne function
+    urlModel.findOne = originalFindOne;
+
+    expect(res).to.have.status(500);
+    expect(res.body).to.equal("Internal Server error");
   });
 });
