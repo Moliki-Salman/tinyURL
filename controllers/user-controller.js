@@ -10,10 +10,7 @@ const signup = async (req, res) => {
       return res.status(400).json({ message: "User already exist" });
     }
     bcrypt.hash(password, 10, async function (err, hashedPassword) {
-      if (err) {
-        throw new Error("error", { cause: err });
-      }
-      // Store hash in your password DB.
+      if (err) { throw new Error("error", { cause: err }) }
       const user = await userModel.create({
         firstname: firstname,
         lastname: lastname,
@@ -26,12 +23,12 @@ const signup = async (req, res) => {
         user: { email, firstname, lastname, token },
       });
     });
-
-
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Internal Server error", error: JSON.stringify(error) });
+    res.status(500)
+      .json({
+          message: "Internal Server error", 
+          error: JSON.stringify(error) 
+      });
   }
 };
 
@@ -52,11 +49,7 @@ const login = async (req, res) => {
         message: "successful",
         user: { email, token },
       });
-      
     })
-     
-
-
   } catch (error) {
     res.status(500).json({
       message: "Internal Server error",

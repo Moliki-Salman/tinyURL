@@ -1,11 +1,10 @@
 const userModel = require("../models/user-model");
-const authenticateUser = require("../config/auth");
+const app = require("../app");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const chai = require("chai");
 const expect = chai.expect;
 const chaiHttp = require("chai-http");
-const app = require("../app");
 chai.use(chaiHttp);
 
 describe("signup a new user", async function () {
@@ -16,7 +15,6 @@ describe("signup a new user", async function () {
       email: "morayo@gmail.com",
       password: "1234",
     };
-
     bcrypt.hash(user.password, 10, async function (err, hashedPassword) {
       if (err) {
         throw new Error("error", { cause: err });
@@ -43,7 +41,6 @@ describe("signup a new user", async function () {
       email: "kolade@gmail.com",
       password: "1234",
     };
-
     bcrypt.hash(user.password, 10, async function (err, hashedPassword) {
       if (err) {
         throw new Error("error", { cause: err });
@@ -55,7 +52,6 @@ describe("signup a new user", async function () {
         password: hashedPassword,
       });
       const token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
-
       chai
         .request(app)
         .post("/user/signup")
@@ -70,6 +66,7 @@ describe("signup a new user", async function () {
           expect(res.body.err).to.be.equal(null);
         });
     });
+  
   });
 
   it("should not register an existing user", async function () {
@@ -190,7 +187,6 @@ describe("delete a user", async function () {
   it("should throw error if user does not exist in database", async function () {
     let user = { email: "morayo@gma.com", password: "1234" };
     await userModel.findOne({ email: user.email });
-
     chai
       .request(app)
       .post("/user/delete")
@@ -205,7 +201,6 @@ describe("delete a user", async function () {
     let existingUser = { email: "test@gmail.com", password: "password" };
     let user = { email: "test@gmail.com", password: "password" };
     await userModel.findOne({ email: user.email });
-    
     bcrypt.compare(
       user.password,
       existingUser,
@@ -218,15 +213,14 @@ describe("delete a user", async function () {
           .send(user)
           .end(async (err, res) => {
             await userModel.deleteOne({ email: user.email });
-            expect(res.body).to.be.a("string");
+            expect(res.body).to.be.a("object");
             expect(res).to.have.status(200);
             expect(res.body).to.have.property("user");
             expect(res.body).to.have.property(
-              "message",
-              "User deleted successfully"
+              "message", "User deleted successfully"
             );
           });
-      }
-    );
+        }
+      )
+    });
   });
-});

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">65.78% </span>
+                <span class="strong">78.94% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>25/38</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">70% </span>
-                <span class="quiet">Branches</span>
-                <span class='fraction'>7/10</span>
+                <span class='fraction'>30/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">80% </span>
-                <span class="quiet">Functions</span>
-                <span class='fraction'>4/5</span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>8/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">65.78% </span>
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>5/5</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">78.94% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>25/38</span>
+                <span class='fraction'>30/38</span>
             </div>
         
             
@@ -141,7 +141,13 @@
 <a name='L76'></a><a href='#L76'>76</a>
 <a name='L77'></a><a href='#L77'>77</a>
 <a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -170,6 +176,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -177,19 +185,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -203,11 +215,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -247,6 +259,8 @@ const signup = async (req, res) =&gt; {
         user: { email, firstname, lastname, token },
       });
     });
+&nbsp;
+&nbsp;
   } catch (error) {
 <span class="cstat-no" title="statement not covered" >    res</span>
       .status(500)
@@ -271,7 +285,11 @@ const login = async (req, res) =&gt; {
         message: "successful",
         user: { email, token },
       });
-    });
+      
+    })
+     
+&nbsp;
+&nbsp;
   } catch (error) {
 <span class="cstat-no" title="statement not covered" >    res.status(500).json({</span>
       message: "Internal Server error",
@@ -280,14 +298,14 @@ const login = async (req, res) =&gt; {
   }
 };
 &nbsp;
-const deleteUser = <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
-<span class="cstat-no" title="statement not covered" >  try {</span>
-    const { email } = <span class="cstat-no" title="statement not covered" >req.body;</span>
-    const user = <span class="cstat-no" title="statement not covered" >await userModel.findOne({ email });</span>
-<span class="cstat-no" title="statement not covered" >    if (!user) {</span>
-<span class="cstat-no" title="statement not covered" >      return res.status(404).json({ message: "User not found" });</span>
+const deleteUser = async (req, res) =&gt; {
+  try {
+    const { email } = req.body;
+    const user = await userModel.findOne({ email });
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
-<span class="cstat-no" title="statement not covered" >    await userModel.deleteOne({ email });</span>
+<span class="cstat-no" title="statement not covered" >    await user.deleteOne({ email });</span>
 <span class="cstat-no" title="statement not covered" >    res.status(200).json({ message: "User deleted successfully", user });</span>
   } catch (error) {
 <span class="cstat-no" title="statement not covered" >    res</span>
@@ -304,7 +322,7 @@ module.exports = { signup, login, deleteUser };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-08-24T08:44:58.486Z
+                at 2023-08-27T23:57:47.280Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
