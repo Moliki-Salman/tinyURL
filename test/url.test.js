@@ -9,7 +9,7 @@ const expect = chai.expect;
 const chaiHttp = require("chai-http");
 chai.use(chaiHttp);
 
-describe("url collections", async function () {
+describe("create tiny URL", async function () {
   it("should create a tiny URL with valid authentication", async function () {
     const user = { email: "newUser1@gmail.com", password: "1234" };
     const token = jwt.sign(user, process.env.SECRET_KEY);
@@ -41,7 +41,7 @@ describe("url collections", async function () {
       });
   });
 
-  it("should return an error is a long url is invalid", async function () {
+  it("should return an error is a long URL is invalid", async function () {
     const user = { email: "newUser2", password: "1234" };
     const token = jwt.sign(user, process.env.SECRET_KEY);
     const longUrl = "invalidurl";
@@ -76,5 +76,21 @@ describe("url collections", async function () {
 
     expect(res).to.have.status(500);
     expect(res.body).to.equal("Internal Server error");
+  });
+});
+
+describe("get tiny URL", async function () {
+  it("should redirect a short URL to a long URL with valid authentication", async function () {
+    const user = { email: "newUser3@gmail.com", password: "1234" };
+    const token = jwt.sign(user, process.env.SECRET_KEY);
+    const longUrl =
+      "https://www.youtube.com/playlist?list=PL3IwAics3J0dc9Yav3MMqUlq6RmdC5-I_";
+    const urlCode = "ijgdUIfso";
+
+    const response = await chai
+      .request(app)
+      .get(`/${urlCode}`)
+      .set("Authorization", `Bearer ${token}`);
+    expect(response).to.redirectTo(longUrl);
   });
 });
