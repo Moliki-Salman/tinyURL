@@ -1,7 +1,7 @@
 const urlModel = require("../models/url-model");
-const userModel = require("../models/user-model");
 const app = require("../app");
 const jwt = require("jsonwebtoken");
+const sinon = require("sinon");
 const chai = require("chai");
 const expect = chai.expect;
 const chaiHttp = require("chai-http");
@@ -37,6 +37,28 @@ describe("create tiny URL", async function () {
         expect(res).to.have.status(200);
         expect(res.body).to.have.property("message", "Authentication failed");
       });
+  });
+
+  it("should mock thee save method of the urlModel by not saving the created url in DB ", async () => {
+    const validLongUrl =
+      "https://mongoosejs.com/docs/api/connection.html#Connection.prototype.readyState";
+
+    const user = { email: "newUser1@gmail.com", password: "1234" };
+    const token = jwt.sign(user, process.env.SECRET_KEY);
+
+    const urlModelMock = sinon.stub(urlModel.prototype, "save").resolves();
+
+    const response = await chai
+      .request(app)
+      .post("/")
+      .set("Authorization", `Bearer ${token}`)
+      .send({ longUrl: validLongUrl });
+
+    expect(response).to.have.status(200);
+    expect(response.body).to.be.an("object");
+    expect(response.body.longUrl).to.equal(validLongUrl);
+
+    urlModelMock.restore(); // Restore the original method
   });
 
   it("should return an error is a long URL is invalid", async function () {
@@ -81,7 +103,7 @@ describe("get tiny URL", async function () {
   it("should redirect a short URL to a long URL with valid authentication", async function () {
     const user = { email: "newUser3@gmail.com", password: "1234" };
     const token = jwt.sign(user, process.env.SECRET_KEY);
-    const longUrl = "https://quillbot.com/"
+    const longUrl = "https://quillbot.com/";
     chai
       .request(app)
       .post("/")
@@ -91,8 +113,8 @@ describe("get tiny URL", async function () {
         expect(res).to.have.status(200);
         expect(res.body).to.have.property("shortUrl");
       });
- 
-    const urlCode = "0OJG4lLPD9"
+
+    const urlCode = "0OJG4lLPD9";
     const res = await chai
       .request(app)
       .get(`/${urlCode}`)
@@ -114,7 +136,6 @@ describe("get tiny URL", async function () {
     expect(res).to.have.status(404);
     expect(res.body).to.have.property("message", "No Url found");
   });
-
 });
 
 describe("Get All URL's and Delete URL", async function () {
@@ -123,22 +144,22 @@ describe("Get All URL's and Delete URL", async function () {
     const token = jwt.sign(user, process.env.SECRET_KEY);
     url = await urlModel.find();
 
-     chai
+    chai
       .request(app)
       .get("/")
       .set("Authorization", `Bearer ${token}`)
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.property("AllURLS");
-        expect(res).to.be.a("object")
-      })
+        expect(res).to.be.a("object");
+      });
   });
-
 
   it("should delete a URL with valid authentication", async function () {
     const user = { email: "newUser3@gmail.com", password: "1234" };
     const token = jwt.sign(user, process.env.SECRET_KEY);
-    const longUrl = "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/409"
+    const longUrl =
+      "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/409";
 
     chai
       .request(app)
@@ -150,8 +171,8 @@ describe("Get All URL's and Delete URL", async function () {
         expect(res.body).to.have.property("shortUrl");
       });
 
-    const urlCode = "fLpzvmGO8b"
-    url = await urlModel.deleteOne({urlCode });
+    const urlCode = "fLpzvmGO8b";
+    url = await urlModel.deleteOne({ urlCode });
 
     chai
       .request(app)
@@ -160,8 +181,6 @@ describe("Get All URL's and Delete URL", async function () {
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.property("message", "url deleted sucessfully");
-      })
+      });
   });
 });
-
-

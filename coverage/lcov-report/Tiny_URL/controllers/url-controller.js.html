@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.77% </span>
+                <span class="strong">91.89% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>28/36</span>
+                <span class='fraction'>34/37</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>5/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.77% </span>
+                <span class="strong">91.89% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>28/36</span>
+                <span class='fraction'>34/37</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -130,30 +130,31 @@
 <a name='L65'></a><a href='#L65'>65</a>
 <a name='L66'></a><a href='#L66'>66</a>
 <a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -178,6 +179,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -207,20 +209,20 @@ const createTinyUrl = async (req, res) =&gt; {
   if (validUrl.isUri(longUrl)) {
     try {
       let url = await urlModel.findOne({ longUrl });
-      <span class="missing-if-branch" title="else path not taken" >E</span>if (url) {
+      if (url) {
         res.json(url);
       } else {
-        const shortUrl = <span class="cstat-no" title="statement not covered" >"http://localhost:3000" + "/" + urlCode;</span>
-        const userId = <span class="cstat-no" title="statement not covered" >req.user.id;</span>
-<span class="cstat-no" title="statement not covered" >        url = new urlModel({</span>
+        const shortUrl = "http://localhost:3000" + "/" + urlCode;
+        const userId = req.user.id;
+        url = new urlModel({
           longUrl,
           shortUrl,
           urlCode,
           user: userId,
           date: new Date(),
         });
-<span class="cstat-no" title="statement not covered" >        await url.save();</span>
-<span class="cstat-no" title="statement not covered" >        res.json(url);</span>
+        await url.save();
+        res.json(url);
       }
     } catch (error) {
       res.status(500).json("Internal Server error");
@@ -247,8 +249,9 @@ const getTinyUrl = async (req, res) =&gt; {
 &nbsp;
 const getAllTinyUrls = async (req, res) =&gt; {
   try {
-    const url = await urlModel.find()
-    return res.status(200).json({ AllURLS: url, });
+    const userId = req.user.id;
+    const url = await urlModel.find().populate("user", "email")
+    return res.status(200).json({userId,  AllURLS: url, });
   } catch (error) {
 <span class="cstat-no" title="statement not covered" >    res.status(500).json({ message: "Request failed", error: error.message });</span>
   }
@@ -271,7 +274,7 @@ module.exports = { createTinyUrl, getTinyUrl, getAllTinyUrls, deleteTinyUrl };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-08-31T10:12:47.750Z
+                at 2023-08-31T22:25:05.574Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
