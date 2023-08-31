@@ -39,7 +39,7 @@ describe("create tiny URL", async function () {
       });
   });
 
-  it("should mock thee save method of the urlModel by not saving the created url in DB ", async () => {
+  it("should mock thee save method of the urlModel by not saving the created tiny URL in DB ", async () => {
     const validLongUrl =
       "https://mongoosejs.com/docs/api/connection.html#Connection.prototype.readyState";
 
