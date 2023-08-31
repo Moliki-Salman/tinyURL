@@ -10,7 +10,7 @@ const urlRoutes = require("./routes/url-routes");
  
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use("/user", userRoutes);
+app.use("/", userRoutes);
 app.use("/", urlRoutes);
 
 const PORT = 3000

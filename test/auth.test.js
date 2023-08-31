@@ -1,5 +1,6 @@
 const { config } = require("dotenv");
 config();
+const app = require("../app")
 const userModel = require("../models/user-model");
 const jwt = require("jsonwebtoken");
 const chai = require("chai");
@@ -26,6 +27,29 @@ describe("authenticate a user", async function () {
 
     expect(req.user).to.be.a("object");
     expect(req.user).to.be.equal(decodedToken);
+  });
+});
+
+
+describe("Authentication Middleware", () => {
+  it("should return 401 if no token provided", async () => {
+    const res = await chai
+      .request(app)
+      .get("/") 
+      .set("Authorization", "Bearer");
+
+    expect(res.status).to.equal(404);
+    expect(res.body).to.have.property("message", "valid token required");
+  });
+
+  it("should return 401 for invalid token", async () => {
+    const response = await chai
+      .request(app)
+      .get("/")
+      .set("Authorization", "Bearer invalidtoken");
+
+    expect(response.status).to.equal(401);
+    expect(response.body.message).to.equal("Authentication failed");
   });
 
 });
