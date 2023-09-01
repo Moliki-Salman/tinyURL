@@ -4,9 +4,7 @@ const urlModel = require("../models/url-model");
 
 const createTinyUrl = async (req, res) => {
   const { longUrl } = req.body;
-  // create url code
   const urlCode = shortid.generate();
-  // check long url
   if (validUrl.isUri(longUrl)) {
     try {
       let url = await urlModel.findOne({ longUrl });
@@ -29,7 +27,7 @@ const createTinyUrl = async (req, res) => {
       res.status(500).json("Internal Server error");
     }
   } else {
-    res.status(401).json("long url not valid");
+    res.status(401).json("long url is not valid");
   }
 };
 
@@ -51,8 +49,8 @@ const getTinyUrl = async (req, res) => {
 const getAllTinyUrls = async (req, res) => {
   try {
     const userId = req.user.id;
-    const url = await urlModel.find({ user: userId }).populate("user", "email");
-    return res.status(200).json({ url });
+    const url = await urlModel.find().populate("user", "email")
+    return res.status(200).json({userId,  AllURLS: url, });
   } catch (error) {
     res.status(500).json({ message: "Request failed", error: error.message });
   }
