@@ -7,7 +7,7 @@ const expect = chai.expect;
 const chaiHttp = require("chai-http");
 chai.use(chaiHttp);
 
-describe("signup a new user", async function () {
+describe("signup a new user",  async () =>  {
   it("should create a new user ", function () {
     let user = {
       firstname: "Morayo",
@@ -15,7 +15,7 @@ describe("signup a new user", async function () {
       email: "morayo@gmail.com",
       password: "1234",
     };
-    bcrypt.hash(user.password, 10, async function (err, hashedPassword) {
+    bcrypt.hash(user.password, 10,  async (err, hashedPassword) =>   {
       if (err) {
         throw new Error("error", { cause: err });
       }
@@ -34,14 +34,14 @@ describe("signup a new user", async function () {
     });
   });
 
-  it("should register a new user with jwt", async function () {
+  it("should register a new user with jwt", async () =>  {
     let user = {
       firstname: "Kolade",
       lastname: "Bisiri",
       email: "kolade@gmail.com",
       password: "1234",
     };
-    bcrypt.hash(user.password, 10, async function (err, hashedPassword) {
+    bcrypt.hash(user.password, 10, async (err, hashedPassword) =>  {
       if (err) {
         throw new Error("error", { cause: err });
       }
@@ -69,7 +69,7 @@ describe("signup a new user", async function () {
   
   });
 
-  it("should not register an existing user", async function () {
+  it("should not register an existing user", async () => {
     let user = {
       firstname: "Morayo",
       lastname: "Afolabi",
@@ -88,14 +88,14 @@ describe("signup a new user", async function () {
       });
   });
 
-  it("should handle internal server error", async function () {
+  it("should handle internal server error", async () => {
     let user = {
       firstname: "new",
       lastname: "new",
       email: "o@gmail.com",
       password: "1234",
     };
-    bcrypt.hash(user.password, async function (err, hashedPassword) {
+    bcrypt.hash(user.password, async (err, hashedPassword) => {
       await userModel.create({
         firstname: user.firstname,
         lastname: user.lastname,
@@ -119,7 +119,7 @@ describe("signup a new user", async function () {
 });
 
 describe("login a user", async function () {
-  it("should check if user details does not exist in database", async function () {
+  it("should check if user details does not exist in database", async () => {
     let user = {
       email: "userdoesnotexist@gmail.com",
       password: "1234",
@@ -136,7 +136,7 @@ describe("login a user", async function () {
       });
   });
 
-  it("should login a user with the correct password", async function () {
+  it("should login a user with the correct password", async () => {
     let existingUser = userModel.findOne({ email: "morayo@gmail.com" });
     let user = { email: "morayo@gmail.com", password: "1234" };
     await userModel.findOne({ email: user.email, password: "1234" });
@@ -160,7 +160,7 @@ describe("login a user", async function () {
     );
   });
 
-  it("should not login a user with an incorrect password", async function () {
+  it("should not login a user with an incorrect password", async () => {
     let existingUser = userModel.findOne({ email: "morayo@gmail.com" });
     let user = { email: "morayo@gmail.com", password: "1432" };
     await userModel.findOne({ email: user.email });
@@ -183,8 +183,8 @@ describe("login a user", async function () {
   });
 });
 
-describe("delete a user", async function () {
-  it("should throw error if user does not exist in database", async function () {
+describe("delete a user",async () => {
+  it("should throw error if user does not exist in database", async () => {
     let user = { email: "morayo@gma.com", password: "1234" };
     await userModel.findOne({ email: user.email });
     chai
@@ -197,14 +197,14 @@ describe("delete a user", async function () {
       });
   });
 
-  it("should authenticate and delete a user", async function () {
+  it("should authenticate and delete a user", async () => {
     let existingUser = { email: "test@gmail.com", password: "password" };
     let user = { email: "test@gmail.com", password: "password" };
     await userModel.findOne({ email: user.email });
     bcrypt.compare(
       user.password,
       existingUser,
-      async function (err, matchedpassword) {
+      async (err, matchedpassword) => {
         let token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
         chai
           .request(app)

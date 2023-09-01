@@ -1,13 +1,13 @@
+const userModel = require("../models/user-model");
+const app = require("../app")
 const { config } = require("dotenv");
 config();
-const app = require("../app")
-const userModel = require("../models/user-model");
 const jwt = require("jsonwebtoken");
 const chai = require("chai");
 const expect = chai.expect;
 
-describe("authenticate a user", async function () {
-  it("should set authentication to equal a valid token", async function () {
+describe("authenticate a user", async () => {
+  it("should set authentication to equal a valid token", async () =>  {
     let req = { user: { email: "morayo@gmail.com", password: "1234" } };
     await userModel.findOne({ email: req.user.email });
     let token = jwt.sign({ email: req.user.email }, process.env.SECRET_KEY);
@@ -18,7 +18,7 @@ describe("authenticate a user", async function () {
     expect(authorization).to.equal(`Bearer ${token}`);
   });
 
-  it("should verify a user with the correct docoded token", async function () {
+  it("should verify a user with the correct docoded token", async () =>  {
     let req = { user: { email: "morayo@gmail.com", password: "1234" } };
     await userModel.findOne({ email: req.user.email });
     let token = jwt.sign({ email: req.user.email }, process.env.SECRET_KEY);
@@ -30,8 +30,7 @@ describe("authenticate a user", async function () {
   });
 });
 
-
-describe("Authentication Middleware", () => {
+describe("Authentication Middleware", async () => {
   it("should return 401 if no token provided", async () => {
     const res = await chai
       .request(app)
@@ -51,7 +50,6 @@ describe("Authentication Middleware", () => {
     expect(response.status).to.equal(401);
     expect(response.body.message).to.equal("Authentication failed");
   });
-
 });
 
 

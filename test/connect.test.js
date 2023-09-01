@@ -3,11 +3,10 @@ const expect = chai.expect;
 const mongoose = require("mongoose");
 const { config } = require("dotenv");
 const connectToDataBase = require("../config/connect");
-
 config();
 
-describe("Database Connection", function () {
-  it("should connect to the database", async function () {
+describe("Database Connection", async () => {
+  it("should connect to the database", async () => {
     await connectToDataBase();
     expect(mongoose.connection.readyState).to.equal(1);
   });
