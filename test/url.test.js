@@ -8,7 +8,7 @@ const chaiHttp = require("chai-http");
 chai.use(chaiHttp);
 
 describe("create tiny URL", async () => {
-  it("should create a tiny URL with valid authentication",  async () =>  {
+  it("should create a tiny URL with valid authentication", async () => {
     const user = { email: "newUser1@gmail.com", password: "1234" };
     const token = jwt.sign(user, process.env.SECRET_KEY);
     const longUrl =
@@ -39,7 +39,7 @@ describe("create tiny URL", async () => {
       });
   });
 
-  it("should mock thee save method of the urlModel by not saving the created tiny URL in DB ", async () => {
+  it("should mock the save method of the urlModel by not saving the created tiny URL in DB ", async () => {
     const validLongUrl =
       "https://mongoosejs.com/docs/api/connection.html#Connection.prototype.readyState";
 
@@ -58,10 +58,10 @@ describe("create tiny URL", async () => {
     expect(response.body).to.be.an("object");
     expect(response.body.longUrl).to.equal(validLongUrl);
 
-    urlModelMock.restore(); 
+    urlModelMock.restore();
   });
 
-  it("should return an error is a long URL is invalid",  async () =>  {
+  it("should return an error is a long URL is invalid", async () => {
     const user = { email: "newUser2", password: "1234" };
     const token = jwt.sign(user, process.env.SECRET_KEY);
     const longUrl = "invalidurl";
@@ -74,7 +74,7 @@ describe("create tiny URL", async () => {
     expect(res.body).to.equal("long url is not valid");
   });
 
-  it("should handle internal server error", async () =>  {
+  it("should handle internal server error", async () => {
     const user = { email: "newUser2", password: "1234" };
     const token = jwt.sign(user, process.env.SECRET_KEY);
     const longUrl = "https://www.npmjs.com/package/bcrypt";
@@ -99,8 +99,8 @@ describe("create tiny URL", async () => {
   });
 });
 
-describe("get tiny URL",  async () =>  {
-  it("should redirect a short URL to a long URL with valid authentication",  async () =>  {
+describe("get tiny URL", async () => {
+  it("should redirect a short URL to a long URL with valid authentication", async () => {
     const user = { email: "newUser3@gmail.com", password: "1234" };
     const token = jwt.sign(user, process.env.SECRET_KEY);
     const longUrl = "https://quillbot.com/";
@@ -123,7 +123,7 @@ describe("get tiny URL",  async () =>  {
     expect(res).to.redirectTo(longUrl);
   });
 
-  it("should handle URL that is not found in DB with valid authentication",  async () =>  {
+  it("should handle URL that is not found in DB with valid authentication", async () => {
     const user = { email: "newUser3@gmail.com", password: "1234" };
     const token = jwt.sign(user, process.env.SECRET_KEY);
     const urlCode = "invalid";
@@ -136,10 +136,33 @@ describe("get tiny URL",  async () =>  {
     expect(res).to.have.status(404);
     expect(res.body).to.have.property("message", "No Url found");
   });
+
+  it("should handle exceptions", async () => {
+    const user = { email: "newUser3@gmail.com", password: "1234" };
+    const token = jwt.sign(user, process.env.SECRET_KEY);
+    const urlCode = "invalid";
+
+    // let obj = { findOne: (_id) => 1 };
+    // sinon.mock(urlModel, obj);
+    const sandbox = sinon.createSandbox()
+    
+    const mockUrlFindOne = sandbox.stub(urlModel, "findOne");
+    mockUrlFindOne.returns({
+      exec: () => 1,
+    });
+
+    const res = await chai
+      .request(app)
+      .get(`/${urlCode}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(res).to.have.status(500);
+    expect(res.body).to.have.property("message", "No Url found");
+  });
 });
 
-describe("Get All URL's and Delete URL",  async () =>  {
-  it("should get All URL's with valid authentication",  async () =>  {
+describe("Get All URL's and Delete URL", async () => {
+  it("should get All URL's with valid authentication", async () => {
     const user = { email: "newUser3@gmail.com", password: "1234" };
     const token = jwt.sign(user, process.env.SECRET_KEY);
     url = await urlModel.find();
@@ -155,7 +178,7 @@ describe("Get All URL's and Delete URL",  async () =>  {
       });
   });
 
-  it("should delete a URL with valid authentication",  async () =>  {
+  it("should delete a URL with valid authentication", async () => {
     const user = { email: "newUser3@gmail.com", password: "1234" };
     const token = jwt.sign(user, process.env.SECRET_KEY);
     const longUrl =
