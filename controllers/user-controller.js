@@ -1,18 +1,18 @@
 const jwt = require("jsonwebtoken");
-const userModel = require("../models/user-model");
+const UserModel = require("../models/user-model");
 const bcrypt = require("bcrypt");
 
 const signup = async (req, res) => {
   const { firstname, lastname, email, password } = req.body;
   try {
-    const existingUser = await userModel.findOne({ email: email });
+    const existingUser = await UserModel.findOne({ email: email });
 
     if (existingUser) {
       return res.status(400).json({ message: "User already exist" });
     }
     bcrypt.hash(password, 10, async function (err, hashedPassword) {
       if (err) { throw new Error("error", { cause: err }) }
-      const user = await userModel.create({
+      const user = await UserModel.create({
         firstname: firstname,
         lastname: lastname,
         email: email,
@@ -36,7 +36,7 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await userModel.findOne({ email: email });
+    const user = await UserModel.findOne({ email: email });
     if (!user) {
       return res.status(400).json({ message: "User  does not exist" });
     }
@@ -62,7 +62,7 @@ const login = async (req, res) => {
 const deleteUser = async (req, res) => {
   try {
     const { email } = req.body;
-    const user = await userModel.findOne({ email });
+    const user = await UserModel.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
