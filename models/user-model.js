@@ -5,20 +5,21 @@ const UserSchema = new Schema(
   {
     firstname: {
       type: String,
-      require: true,
+      required: function() { return this.userId != null; },
     },
     lastname: {
       type: String,
-      require: true,
+      required: function() { return this.userId != null; },
     },
     email: {
       type: String,
-      require: true,
+      required: function() { return this.userId != null; },
       unique: true,
+      lowercase: true,
     },
     password: {
       type: String,
-      require: true,
+      required: function() { return this.userId != null; },
     },
      date: {
     type: String,
