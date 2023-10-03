@@ -5,21 +5,21 @@ const userSchema = new Schema(
   {
     firstname: {
       type: String,
-      required: function() { return this.userId != null; },
+      required: true,
     },
     lastname: {
       type: String,
-      required: function() { return this.userId != null; },
+      required: true,
     },
     email: {
       type: String,
-      required: function() { return this.userId != null; },
+      required: true,
       unique: true,
       lowercase: true,
     },
     password: {
       type: String,
-      required: function() { return this.userId != null; },
+      required: true,
     },
      date: {
     type: String,
