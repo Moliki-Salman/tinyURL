@@ -4,15 +4,15 @@ const Schema = mongoose.Schema;
 const urlSchema = new Schema({
   urlCode:  {
     type: String,
-    required: function() { return this.userId != null; }
+    required: true,
   },
   longUrl:  {
     type: String, 
-    required: function() { return this.userId != null; }
+    required: true,
   },
   shortUrl:  {
     type: String, 
-    required: function() { return this.userId != null; }
+    required: true,
   },
   user: { type: Schema.Types.ObjectId, ref: "user" },
   date: {

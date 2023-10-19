@@ -1,12 +1,41 @@
-const Url = require('../../models/url-model')
+const Url = require('../../models/url-model');
+const connectToDB = require("../../config/connect");
+const { connections } = require("mongoose");
 
-describe('url', () => {
+let mongod;
+
+describe('url', () => { 
   describe('validations', () => {
-    it('is valid without any input from url', async () => {
-      const url = new Url()
-      const errors = await url.validate()
 
-      expect(errors).toBeUndefined()
-    })
-  })
-})
+    beforeAll(async () => {
+      connections.map(async (a) => await a.dropDatabase())
+      mongod = connectToDB()
+    });
+
+    afterAll(async () => {
+      connections.map(async (a) => {
+        await a.close()
+        await a.dropDatabase()
+      })
+    });
+
+    it("is invalid without any input from shorturl, longurl and urlcode", async () => {
+      const url = new Url({});
+
+      await expect(url.validate()).rejects.toThrow(
+        "Url validation failed: shortUrl: Path `shortUrl` is required., longUrl: Path `longUrl` is required., urlCode: Path `urlCode` is required."  
+      );
+    });
+
+    it("is valid when all inputs are provided", async () => {
+      const url = new Url({
+        longUrl: "https://www.youtube.com/",
+        shortUrl: "https://uerk56",
+        urlCode: "uerk56"
+      });
+      await url.save()
+
+      await expect(url.validate()).resolves.not.toThrow();
+    });
+  });
+});
