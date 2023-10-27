@@ -13,16 +13,9 @@ const validUser = {
 describe("signup", () => {
   describe("when a user already exist", () => {
     it("should return a 400 status response", async () => {
-      UserModel.findOne = jest.fn().mockResolvedValue({});
+      UserModel.findOne = jest.fn().mockResolvedValue({ validUser });
 
-      const req = {
-        body: {
-          firstname: "Sarah",
-          lastname: "Morgan",
-          email: "sarah.m@gmail.com",
-          password: "password0923",
-        },
-      };
+      const req = { body: validUser };
 
       const res = {
         status: jest.fn().mockReturnThis(),
