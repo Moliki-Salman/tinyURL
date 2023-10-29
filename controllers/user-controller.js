@@ -21,7 +21,7 @@ const signup = async (req, res) => {
         password: hashedPassword,
       });
 
-      console.log({ user })
+      // console.log({ user })
       const token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
 
       res
@@ -31,6 +31,7 @@ const signup = async (req, res) => {
           user: { email, firstname, lastname, token },
         })
     });
+    
   } catch (error) {
     console.log({ error });
     res.status(500).json({

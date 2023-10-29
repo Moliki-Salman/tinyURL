@@ -1,5 +1,9 @@
+const { expect } = require("chai");
 const UserController = require("../../controllers/user-controller");
 const UserModel = require("../../models/user-model");
+const bcrypt = require("bcrypt");
+const salt = 10
+const jwt = require("jsonwebtoken");
 
 jest.mock("../../models/user-model");
 
@@ -55,4 +59,44 @@ describe("signup", () => {
       });
     });
   });
+
+  describe("create a user", () => {
+    it("should create a user and return a 201 status code", async () => {
+      UserModel.findOne = jest.fn().mockResolvedValue(null);
+      UserModel.create = jest.fn().mockResolvedValue({ validUser });
+
+      const req = { body: validUser }
+
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+
+      const mockBcryptHash = () => {
+        bcrypt.hash.mockImplementation((password, salt, callback) => {
+          callback(null, 'hashedPassword');
+        });
+      };
+      mockBcryptHash();
+
+      jwt.sign.mockReturnValue('fakeToken');
+
+      await UserController.signup(req, res);
+
+      expect(UserModel.findOne).toHaveBeenCalledWith({ email: "sarah.m@gmail.com" });
+      expect(UserModel.create).toHaveBeenCalledWith({ validUser });
+      expect(jwt.sign).toHaveBeenCalledWith({ email: "sarah.m@gmail.com" }, process.env.SECRET_KEY);
+      expect(res.status).toHaveBeenCalledWith(201);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "successful",
+        user: {
+          email: "sarah.m@gmail.com",
+          firstname: "Sarah",
+          lastname: "Morgan",
+          token: "fakeToken",
+        },
+      });
+    });
+
+  })
 });
