@@ -47,7 +47,7 @@ describe("signup", () => {
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.json).toHaveBeenCalledWith({
         message: "Internal Server error",
-        error: "null",
+        error: null,
       });
     });
   });
@@ -63,10 +63,7 @@ describe("signup", () => {
         json: jest.fn(),
       };
 
-      bcrypt.hash.mockImplementation((password, _salt, callback) => {
-        callback(null, password);
-      });
-
+      bcrypt.hash.mockResolvedValue("fakeHashedPassword");
       jwt.sign.mockReturnValue("fakeToken");
 
       await UserController.signup(req, res);

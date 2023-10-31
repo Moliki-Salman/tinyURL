@@ -10,29 +10,26 @@ const signup = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: "User already exist" });
     }
-    bcrypt.hash(password, 10, async (err, hashedPassword) => {
-      if (err) {
-        throw new Error("error", { cause: err });
-      }
-      const user = await UserModel.create({
-        firstname: firstname,
-        lastname: lastname,
-        email: email,
-        password: hashedPassword,
-      });
 
-      const token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-      res.status(201).json({
-        message: "successful",
-        user: { email, firstname, lastname, token },
-      });
+    const user = await UserModel.create({
+      firstname: firstname,
+      lastname: lastname,
+      email: email,
+      password: hashedPassword,
+    });
+
+    const token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
+
+    res.status(201).json({
+      message: "successful",
+      user: { email, firstname, lastname, token },
     });
   } catch (error) {
-    console.log({ error });
     res.status(500).json({
       message: "Internal Server error",
-      error: JSON.stringify(error),
+      error: error,
     });
   }
 };
