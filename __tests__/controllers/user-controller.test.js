@@ -1,4 +1,5 @@
 const UserController = require("../../controllers/user-controller");
+const userModel = require("../../models/user-model");
 const UserModel = require("../../models/user-model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -12,12 +13,6 @@ const validUser = {
   lastname: "Morgan",
   email: "sarah.m@gmail.com",
   password: "password0923",
-};
-const userInput = {
-  firstname: "Fake",
-  lastname: "User",
-  email: "fakeuser@gmail.com",
-  password: "fakepassword",
 };
 
 describe("signup", () => {
@@ -93,20 +88,32 @@ describe("signup", () => {
 });
 
 describe("login", () => {
-  describe("when user email and password are invalid", () => {
+  describe("when user password are invalid", () => {
     it("should return a status response 400", async () => {
-      UserModel.findOne = jest.fn().mockResolvedValueOnce(validUser);
-
-      const req = { body: validUser };
+      const req = { email: "sarah.m@gmail.com", password: "invalidpassword" };
       const res = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
       };
 
+      const mockedUser = {
+        email: "sarah.m@gmail.com",
+        password: "invalidpassword",
+      };
+      UserModel.findOne = jest.fn().mockResolvedValueOnce(mockedUser);
+      bcrypt.compare.mockImplementationOnce((password, hashedPassword, null))
+
       await UserController.login(req, res);
-    
-      bcrypt.compare.mockResolvedValue("fakeHashedPassword");
-      jwt.sign.mockReturnValue("fakeToken");
+
+      expect(bcrypt.compare).toHaveBeenCalledWith(
+        "password0923",
+        "hashedpasword",
+        expect.any(Function)
+      );
+
+      expect(userModel).toHaveBeenCalledWith({ email: "sarah.m@gmail.com" })
+      expect(res.status).toHaveBeenCalledWith(400);
+      expect(res.json).toHaveBeenCalledWith({ message: "Invalid credentials" });
     });
   });
   /*
