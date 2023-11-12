@@ -13,11 +13,17 @@ const validUser = {
   email: "sarah.m@gmail.com",
   password: "password0923",
 };
+const userInput = {
+  firstname: "Fake",
+  lastname: "User",
+  email: "fakeuser@gmail.com",
+  password: "fakepassword",
+};
 
 describe("signup", () => {
   describe("when a user already exist", () => {
     it("should return a 400 status response", async () => {
-      UserModel.findOne = jest.fn().mockResolvedValue({ validUser });
+      UserModel.findOne = jest.fn().mockResolvedValue(validUser);
 
       const req = { body: validUser };
       const res = {
@@ -84,4 +90,30 @@ describe("signup", () => {
       });
     });
   });
+});
+
+describe("login", () => {
+  describe("when user email and password are invalid", () => {
+    it("should return a status response 400", async () => {
+      UserModel.findOne = jest.fn().mockResolvedValueOnce(validUser);
+
+      const req = { body: validUser };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+
+      await UserController.login(req, res);
+    
+      bcrypt.compare.mockResolvedValue("fakeHashedPassword");
+      jwt.sign.mockReturnValue("fakeToken");
+    });
+  });
+  /*
+
+  when a user has an invalid username and password 
+  when logining a user fails. 
+  create a user 
+
+   */
 });
