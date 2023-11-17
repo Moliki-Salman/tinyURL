@@ -31,7 +31,7 @@ describe("User", () => {
         firstname: "Yusuf",
         lastname: "Daniju",
         password: "password",
-        email: "danijuyusuf@gmail.com",
+        email: "dan@gmail.com",
       });
 
       await expect(user.validate()).resolves.not.toThrow();

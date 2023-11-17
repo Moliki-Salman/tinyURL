@@ -90,28 +90,25 @@ describe("signup", () => {
 describe("login", () => {
   describe("when user password are invalid", () => {
     it("should return a status response 400", async () => {
-      const req = { email: "sarah.m@gmail.com", password: "invalidpassword" };
+      const mockedUser = {
+        email: "sarah.m@gmail.com",
+        password: "invalidpassword",
+      };
+      const req = { body: mockedUser };
       const res = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
       };
 
-      const mockedUser = {
-        email: "sarah.m@gmail.com",
-        password: "invalidpassword",
-      };
       UserModel.findOne = jest.fn().mockResolvedValueOnce(mockedUser);
-      bcrypt.compare.mockImplementationOnce((password, hashedPassword, null))
+      bcrypt.compare.mockResolvedValue((false));
 
       await UserController.login(req, res);
 
       expect(bcrypt.compare).toHaveBeenCalledWith(
-        "password0923",
-        "hashedpasword",
-        expect.any(Function)
+        "invalidpassword",
+        "invalidpassword",
       );
-
-      expect(userModel).toHaveBeenCalledWith({ email: "sarah.m@gmail.com" })
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.json).toHaveBeenCalledWith({ message: "Invalid credentials" });
     });

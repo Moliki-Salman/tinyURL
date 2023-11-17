@@ -42,15 +42,14 @@ const login = async (req, res) => {
       return res.status(400).json({ message: "User  does not exist" });
     }
 
-    bcrypt.compare(password, user.password, function (err, matchedpassword) {
-      if (!matchedpassword) {
-        return res.status(400).json({ message: "Invalid credentials" });
-      }
-      const token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
-      res.status(201).json({
-        message: "successful",
-        user: { email, token },
-      });
+    const passwordMatched = await bcrypt.compare(password, user.password);
+    if (!passwordMatched) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+    const token = jwt.sign({ email: user.email }, process.env.SECRET_KEY);
+    res.status(201).json({
+      message: "successful",
+      user: { email, token },
     });
   } catch (error) {
     res.status(500).json({
