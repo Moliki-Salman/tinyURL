@@ -1,5 +1,4 @@
 const UserController = require("../../controllers/user-controller");
-const userModel = require("../../models/user-model");
 const UserModel = require("../../models/user-model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -100,14 +99,14 @@ describe("login", () => {
         json: jest.fn(),
       };
 
-      UserModel.findOne = jest.fn().mockResolvedValueOnce(mockedUser);
-      bcrypt.compare.mockResolvedValue((false));
+      UserModel.findOne = jest.fn().mockResolvedValue(mockedUser);
+      bcrypt.compare.mockResolvedValue(false);
 
       await UserController.login(req, res);
 
       expect(bcrypt.compare).toHaveBeenCalledWith(
         "invalidpassword",
-        "invalidpassword",
+        "invalidpassword"
       );
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.json).toHaveBeenCalledWith({ message: "Invalid credentials" });
