@@ -111,6 +111,33 @@ describe("login", () => {
       expect(res.status).toHaveBeenCalledWith(400);
       expect(res.json).toHaveBeenCalledWith({ message: "Invalid credentials" });
     });
+
+    describe("when user email and password is valid", () => {
+      it("should login user and return a status code 201", async () => {
+        UserModel.findOne = jest.fn().mockResolvedValue(validUser);
+
+        const req = { body: validUser };
+        const res = {
+          status: jest.fn().mockReturnThis(),
+          json: jest.fn(),
+        };
+
+        bcrypt.compare.mockResolvedValue("fakeMatchedpassword");
+        jwt.sign.mockReturnValue("fakeToken");
+
+        await UserController.login(req, res);
+
+        expect(jwt.sign).toHaveBeenCalledWith(
+          { email: "sarah.m@gmail.com" },
+          process.env.SECRET_KEY
+        );
+        expect(res.status).toHaveBeenCalledWith(201);
+        expect(res.json).toHaveBeenCalledWith({
+          message: "successful",
+          user: { email: "sarah.m@gmail.com", token: "fakeToken" },
+        });
+      });
+    });
   });
   /*
 

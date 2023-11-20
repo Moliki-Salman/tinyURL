@@ -24,7 +24,7 @@ const signup = async (req, res) => {
 
     res.status(201).json({
       message: "successful",
-      user: { email, firstname, lastname, token user},
+      user: { email, firstname, lastname, token }
     });
   } catch (error) {
     res.status(500).json({
