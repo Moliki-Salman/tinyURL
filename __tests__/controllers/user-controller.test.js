@@ -138,6 +138,33 @@ describe("login", () => {
         });
       });
     });
+
+    describe("delete user", () => {
+      it("should delete a user and return status response 200", async () => {
+        // UserModel.findOne = jest.fn().mockResolvedValue(validUser);
+        UserModel.deleteOne = jest.fn().mockResolvedValue(validUser);
+
+        const req = { body: validUser };
+        const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
+        bcrypt.compare.mockResolvedValue("fakeMatchedpassword");
+        jwt.sign.mockReturnValue("fakeToken");
+
+
+        await UserController.deleteUser(req, res);
+
+        expect(jwt.sign).toHaveBeenCalledWith(
+          { email: "sarah.m@gmail.com" },
+          process.env.SECRET_KEY
+        );
+
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({
+          message: "User deleted successfully",
+
+        });
+      });
+    });
   });
   /*
 
