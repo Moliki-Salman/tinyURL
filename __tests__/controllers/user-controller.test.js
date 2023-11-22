@@ -93,6 +93,7 @@ describe("login", () => {
         email: "sarah.m@gmail.com",
         password: "invalidpassword",
       };
+
       const req = { body: mockedUser };
       const res = {
         status: jest.fn().mockReturnThis(),
@@ -141,36 +142,20 @@ describe("login", () => {
 
     describe("delete user", () => {
       it("should delete a user and return status response 200", async () => {
-        // UserModel.findOne = jest.fn().mockResolvedValue(validUser);
-        UserModel.deleteOne = jest.fn().mockResolvedValue(validUser);
+        UserModel.findOne = jest.fn().mockResolvedValue(validUser);
+        validUser.deleteOne = jest.fn().mockResolvedValue();
 
         const req = { body: validUser };
         const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 
-        bcrypt.compare.mockResolvedValue("fakeMatchedpassword");
-        jwt.sign.mockReturnValue("fakeToken");
-
-
         await UserController.deleteUser(req, res);
-
-        expect(jwt.sign).toHaveBeenCalledWith(
-          { email: "sarah.m@gmail.com" },
-          process.env.SECRET_KEY
-        );
 
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith({
           message: "User deleted successfully",
-
+          user: validUser,
         });
       });
     });
   });
-  /*
-
-  when a user has an invalid username and password 
-  when logining a user fails. 
-  create a user 
-
-   */
 });
