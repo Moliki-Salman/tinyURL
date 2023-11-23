@@ -21,13 +21,13 @@ const createTinyUrl = async (req, res) => {
           date: new Date(),
         });
         await url.save();
-        res.json(url);
+        res.status(201).json(url);
       }
     } catch (error) {
-      res.status(500).json("Internal Server error");
+      res.status(500).json({ message: "Internal Server error" });
     }
   } else {
-    res.status(401).json("long url is not valid");
+    res.status(401).json({ message: "long url is not valid" });
   }
 };
 
