@@ -49,8 +49,8 @@ const getTinyUrl = async (req, res) => {
 const getAllTinyUrls = async (req, res) => {
   try {
     const userId = req.user.id;
-    const url = await UrlModel.find().populate("user", "email")
-    return res.status(200).json({userId,  AllURLS: url, });
+    const url = await UrlModel.find().populate("user", "email");
+    return res.status(200).json({ userId, AllURLS: url });
   } catch (error) {
     res.status(500).json({ message: "Request failed", error: error.message });
   }
