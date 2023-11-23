@@ -12,24 +12,23 @@ const longUrl = "https://www.geeksforgeeks.org/mongoose-findone-function/";
 describe("create url", () => {
   describe("when a longUrl is invalid", () => {
     it("should return a status code 401", async () => {
-      const invalidLongUrl = "";
-      UrlModel.findOne = jest.fn().mockResolvedValue(invalidLongUrl)
+      const invalidLongUrl = "http://not-a-Url";
+      validUrl.isUri = jest.fn().mockReturnValue(false);
 
       const req = {
-      body: invalidLongUrl
+        body: invalidLongUrl,
       };
       const res = {
-      status: jest.fn().mockReturnThis(),
-      json: jest.fn()
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
       };
 
-      await UrlController.createTinyUrl(req, res)
+      await UrlController.createTinyUrl(req, res);
 
       expect(res.status).toHaveBeenCalledWith(401);
       expect(res.json).toHaveBeenCalledWith({
         message: "long url is not valid",
       });
-
     });
   });
 });
