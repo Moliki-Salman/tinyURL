@@ -10,5 +10,9 @@
 *** when i used UrlModel.findOne = jest.fn().mockResolvedValue(false), the finction was called once this time but it reponded with a 500 status code.
  when i used validUrl.isUri = jest.fn().mockResolvedValue(invalidLongUrl), the finction was called once this time but it reponded with a 500 status code.;
 
+*** const token = authorization.split(" ")[1]; TypeError: Cannot read properties of undefined (reading 'split'): This error means that the postman need a validtoken.;
+
+***  error: JsonWebTokenError: invalid token: This error means that the bear and token you are to input in postman should not be rapped in a string like this "Bearer tokennnnn"
+
 
 */

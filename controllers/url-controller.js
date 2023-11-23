@@ -9,7 +9,7 @@ const createTinyUrl = async (req, res) => {
     try {
       let url = await UrlModel.findOne({ longUrl });
       if (url) {
-        res.json({url, message: "Valid Url"});
+        res.status(200).json({ url, message: "ShortUrl created successfully" });
       } else {
         const shortUrl = "http://localhost:3000" + "/" + urlCode;
         const userId = req.user.id;

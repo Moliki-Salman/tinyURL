@@ -31,6 +31,29 @@ describe("create url", () => {
       });
     });
   });
+
+  describe("when a URL exist in the database", () => {
+    it("should return the existing URL and a status code 200", async () => {
+      UrlModel.findOne = jest.fn().mockResolvedValue(longUrl);
+      validUrl.isUri = jest.fn().mockReturnValue(true);
+
+      const req = {
+        body: longUrl,
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+
+      await UrlController.createTinyUrl(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "ShortUrl created successfully",
+        url: "https://www.geeksforgeeks.org/mongoose-findone-function/",
+      });
+    });
+  });
 });
 
 /* describe create user{
