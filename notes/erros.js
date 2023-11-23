@@ -8,6 +8,7 @@
   code: 'ERR_UNHANDLED_REJECTION'
 }
 *** when i used UrlModel.findOne = jest.fn().mockResolvedValue(false), the finction was called once this time but it reponded with a 500 status code.
+ when i used validUrl.isUri = jest.fn().mockResolvedValue(invalidLongUrl), the finction was called once this time but it reponded with a 500 status code.;
 
 
 */

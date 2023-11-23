@@ -13,7 +13,7 @@ describe("create url", () => {
   describe("when a longUrl is invalid", () => {
     it("should return a status code 401", async () => {
       const invalidLongUrl = "";
-      validUrl.isUri = jest.fn().mockResolvedValue(invalidLongUrl);
+      UrlModel.findOne = jest.fn().mockResolvedValue(invalidLongUrl)
 
       const req = {
       body: invalidLongUrl
