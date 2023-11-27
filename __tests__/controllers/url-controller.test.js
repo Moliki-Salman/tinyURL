@@ -8,11 +8,11 @@ jest.mock("shortid");
 jest.mock("valid-url");
 
 const longUrl = "https://www.geeksforgeeks.org/mongoose-findone-function/";
+const invalidLongUrl = "http://not-a-Url";
 
 describe("create url", () => {
   describe("when a longUrl is invalid", () => {
     it("should return a status code 401", async () => {
-      const invalidLongUrl = "http://not-a-Url";
       validUrl.isUri = jest.fn().mockReturnValue(false);
 
       const req = {
@@ -64,6 +64,9 @@ describe("create url", () => {
 
       const req = {
         body: longUrl,
+        user: {
+          id: "newUser99",
+        },
       };
       const res = {
         status: jest.fn().mockReturnThis(),
@@ -73,9 +76,7 @@ describe("create url", () => {
       await UrlController.createTinyUrl(req, res);
 
       expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalledWith(
-        "https://www.geeksforgeeks.org/mongoose-findone-function/"
-      );
+      expect(res.json).toHaveBeenCalledWith({ url: longUrl });
     });
   });
 });
