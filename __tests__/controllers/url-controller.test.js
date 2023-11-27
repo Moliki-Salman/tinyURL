@@ -76,14 +76,30 @@ describe("create url", () => {
       await UrlController.createTinyUrl(req, res);
 
       expect(res.status).toHaveBeenCalledWith(201);
-      expect(res.json).toHaveBeenCalled()
+      expect(res.json).toHaveBeenCalled();
+    });
+  });
+
+  describe("when a longUrl is invalid and does not exist in the database", () => {
+    it("should return  500 status code", async () => {
+      validUrl.isUri = jest.fn().mockResolvedValue(invalidLongUrl);
+      UrlModel.findOne = jest.fn().mockResolvedValue(false);
+
+      const req = {
+        body: invalidLongUrl,
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+
+      await UrlController.createTinyUrl(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Internal Server error",
+      });
     });
   });
 });
 
-/* describe create user{
-test if longurl is not valid, should return status code 401;
-test if longurl is valid, then create a tinyUrl with a 201 status code;
-test  for 500 internal server error;
-
-*/
