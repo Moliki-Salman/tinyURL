@@ -12,7 +12,9 @@ const authenticateUser = async (req, res, next) => {
     const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
     req.user= decodedToken;
     next();
+
   } catch (error) {
+    console.log({ error, message: "ERROR" });
     return res.status(401).json({ message: "Authentication failed" });
   }
 };
