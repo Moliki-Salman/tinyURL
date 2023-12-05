@@ -8,7 +8,6 @@ describe('url', () => {
   describe('validations', () => {
 
     beforeAll(async () => {
-      connections.map(async (a) => await a.dropDatabase())
       mongod = connectToDB()
     });
 
@@ -17,6 +16,10 @@ describe('url', () => {
         await a.close()
         await a.dropDatabase()
       })
+    });
+
+    afterEach(async () => {
+      await Url.deleteMany({});
     });
 
     it("is invalid without any input from shorturl, longurl and urlcode", async () => {
