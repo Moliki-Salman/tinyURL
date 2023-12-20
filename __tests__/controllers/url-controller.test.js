@@ -9,8 +9,9 @@ jest.mock("valid-url");
 
 const longUrl = "https://www.geeksforgeeks.org/mongoose-findone-function/";
 const invalidLongUrl = "http://not-a-Url";
+const shortUrl = "https://uerk56";
 
-describe("create url", () => {
+describe("create Tinyurl", () => {
   describe("when a longUrl is invalid", () => {
     it("should return a status code 401", async () => {
       validUrl.isUri = jest.fn().mockReturnValue(false);
@@ -103,3 +104,26 @@ describe("create url", () => {
   });
 });
 
+describe("get Tinyurl", () => {
+  describe("when a url code exist in database", () => {
+    it("should redirect with status code 308 ", async () => {
+      UrlModel.findOne = jest.fn().mockResolvedValue({ longUrl });
+      const req = {
+        params: {
+          code: "dertk",
+        },
+      };
+
+      const res = {
+        redirect: jest.fn().mockReturnThis(),
+      };
+
+      await UrlController.getTinyUrl(req, res);
+
+      expect(res.redirect).toHaveBeenCalledWith(
+        308,
+        "https://www.geeksforgeeks.org/mongoose-findone-function/"
+      );
+    });
+  });
+});
