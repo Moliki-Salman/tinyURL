@@ -7,7 +7,6 @@ let mongod;
 describe("User", () => {
   describe("validations", () => {
     beforeAll(async () => {
-      connections.map(async (a) => await a.dropDatabase())
       mongod = connectToDB()
     });
 
@@ -16,6 +15,10 @@ describe("User", () => {
         await a.close()
         await a.dropDatabase()
       })
+    });
+
+    afterEach(async () => {
+      await User.deleteMany({});
     });
 
     it("is invalid without an email, password firstname, and lastname", async () => {
@@ -42,11 +45,11 @@ describe("User", () => {
         firstname: "Yusuf",
         lastname: "Daniju",
         password: "password",
-        email: "DANIJU@gmail.com",
+        email: "DANIJUY@gmail.com",
       });
       await user.save();
 
-      await expect(user.email).toEqual("daniju@gmail.com");
+      await expect(user.email).toEqual("danijuy@gmail.com");
     });
   });
 });
