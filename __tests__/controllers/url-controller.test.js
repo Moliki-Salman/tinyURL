@@ -113,11 +113,9 @@ describe("get Tinyurl", () => {
           code: "dertk",
         },
       };
-
       const res = {
         redirect: jest.fn().mockReturnThis(),
       };
-
       await UrlController.getTinyUrl(req, res);
 
       expect(res.redirect).toHaveBeenCalledWith(
@@ -126,4 +124,49 @@ describe("get Tinyurl", () => {
       );
     });
   });
+
+  describe("when a url does not exist in the database", () => {
+    it("should return a status code 404", async () => {
+      UrlModel.findOne = jest.fn().mockResolvedValue(false);
+
+      const req = {
+        params: {
+          code: "dertk",
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await UrlController.getTinyUrl(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(404);
+      expect(res.json).toHaveBeenCalledWith({ message: "No Url found" });
+    });
+  });
+
+ describe("when there is an error while quering the database", () => {
+   it("should return a status code 500", async () => {
+const errorMessage = "An error occurred in the database"
+     UrlModel.findOne = jest.fn().mockResolvedValue(new Error(errorMessage));
+
+     const req = {
+       params: {
+         code: "dertk",
+       },
+     };
+     const res = {
+// redirect:jest.fn(),
+       status: jest.fn(),
+       json: jest.fn(),
+     };
+     await UrlController.getTinyUrl(req, res);
+
+     expect(res.status).toHaveBeenCalledWith(500);
+     expect(res.json).toHaveBeenCalledWith({
+       message: "Internal Server error",
+       error: errorMessage
+     });
+   });
+ });
 });
