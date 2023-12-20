@@ -12,12 +12,12 @@ const createTinyUrl = async (req, res) => {
         res.status(200).json({ url, message: "ShortUrl created successfully" });
       } else {
         const shortUrl = "http://localhost:3000" + "/" + urlCode;
-        const userId = req.user.id;
+        // const userId = req.user.id;
         url = new UrlModel({
           longUrl,
           shortUrl,
           urlCode,
-          user: userId,
+          // user: userId,//
           date: new Date(),
         });
         await url.save();
@@ -49,8 +49,8 @@ const getTinyUrl = async (req, res) => {
 const getAllTinyUrls = async (req, res) => {
   try {
     const userId = req.user.id;
-    const url = await UrlModel.find().populate("user", "email");
-    return res.status(200).json({ userId, AllURLS: url });
+    const url = await UrlModel.find()
+    return res.status(200).json({ AllURLS: url, userId });
   } catch (error) {
     res.status(500).json({ message: "Request failed", error: error });
   }
