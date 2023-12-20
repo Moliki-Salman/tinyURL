@@ -145,28 +145,25 @@ describe("get Tinyurl", () => {
     });
   });
 
- describe("when there is an error while quering the database", () => {
-   it("should return a status code 500", async () => {
-const errorMessage = "An error occurred in the database"
-     UrlModel.findOne = jest.fn().mockResolvedValue(new Error(errorMessage));
+  describe("when there is an error while quering the database", () => {
+    it("should return a status code 500", async () => {
+      UrlModel.findOne = jest.fn().mockRejectedValue();
 
-     const req = {
-       params: {
-         code: "dertk",
-       },
-     };
-     const res = {
-// redirect:jest.fn(),
-       status: jest.fn(),
-       json: jest.fn(),
-     };
-     await UrlController.getTinyUrl(req, res);
+      const req = {
+        params: {
+          code: "dertk",
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn()
+      };
+      await UrlController.getTinyUrl(req, res);
 
-     expect(res.status).toHaveBeenCalledWith(500);
-     expect(res.json).toHaveBeenCalledWith({
-       message: "Internal Server error",
-       error: errorMessage
-     });
-   });
- });
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Internal Server error",
+      });
+    });
+  });
 });

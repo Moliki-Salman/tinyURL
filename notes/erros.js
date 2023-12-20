@@ -14,5 +14,5 @@
 
 ***  error: JsonWebTokenError: invalid token: This error means that the bear and token you are to input in postman should not be rapped in a string like this "Bearer tokennnnn"
 
-
+*** I NOTED THAT IN MY TEST FOR THE CONTROLLERS,IF I DID NOT USE THE JEST FUNCTION .mockReturnThis() ON THE STATUS, THE TEST WILL NOT PASS. SO I ENDED UP USING THIS to  mockmy res.status function:  status: jest.fn().mockReturnThis(),
 */

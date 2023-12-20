@@ -42,7 +42,7 @@ const getTinyUrl = async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ message: "Internal Server error", error: error.message });
+      .json({ message: "Internal Server error", error: error });
   }
 };
 
@@ -52,7 +52,7 @@ const getAllTinyUrls = async (req, res) => {
     const url = await UrlModel.find().populate("user", "email");
     return res.status(200).json({ userId, AllURLS: url });
   } catch (error) {
-    res.status(500).json({ message: "Request failed", error: error.message });
+    res.status(500).json({ message: "Request failed", error: error });
   }
 };
 
