@@ -11,10 +11,12 @@ const longUrl = "https://www.geeksforgeeks.org/mongoose-findone-function/";
 const invalidLongUrl = "http://not-a-Url";
 const shortUrl = "https://uerk56";
 let url = [
-  { longUrl: "https://www.geeksforgeeks.org/mongoose-findone-function/", urlCode:
-"uerk56", shortUrl: "https://uerk56" },
-
-]
+  {
+    longUrl: "https://www.geeksforgeeks.org/mongoose-findone-function/",
+    urlCode: "uerk56",
+    shortUrl: "https://uerk56",
+  },
+];
 
 describe("create Tinyurl", () => {
   describe("when a longUrl is invalid", () => {
@@ -174,28 +176,25 @@ describe("get Tinyurl", () => {
 });
 
 describe("get All Tinyurl", () => {
-  describe("to get all the list of tiny urls created by a user", () => {
+  describe("to get all the list of tiny url created by a user", () => {
     it("should  list all created tiny url and return a 200 status code", async () => {
-      UrlModel.find = jest.fn().mockResolvedValue({ url });
-
+      UrlModel.find = jest.fn().mockResolvedValue(url);
       const req = {
-        user:{
+        user: {
           id: "user99",
-          }
-      }
+        },
+      };
       const res = {
         status: jest.fn().mockReturnThis(),
-        json: jest.fn()
-      }
-
+        json: jest.fn(),
+      };
       await UrlController.getAllTinyUrls(req, res);
 
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         userId: "user99",
-        AllURLS: url
+        AllURLS: url,
       });
     });
-
+  });
 });
-})
