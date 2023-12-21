@@ -89,7 +89,7 @@ describe("create Tinyurl", () => {
   describe("when a longUrl is invalid and does not exist in the database", () => {
     it("should return  500 status code", async () => {
       validUrl.isUri = jest.fn().mockResolvedValue(invalidLongUrl);
-      UrlModel.findOne = jest.fn().mockResolvedValue(false);
+      UrlModel.findOne = jest.fn().mockRejectedValue();
 
       const req = {
         body: invalidLongUrl,
