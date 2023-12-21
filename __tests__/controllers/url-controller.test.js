@@ -2,6 +2,7 @@ const UrlController = require("../../controllers/url-controller");
 const UrlModel = require("../../models/url-model");
 const shortid = require("shortid");
 const validUrl = require("valid-url");
+const { exists } = require("../../models/user-model");
 
 jest.mock("../../models/url-model");
 jest.mock("shortid");
@@ -22,7 +23,6 @@ describe("create Tinyurl", () => {
   describe("when a longUrl is invalid", () => {
     it("should return a status code 401", async () => {
       validUrl.isUri = jest.fn().mockReturnValue(false);
-
       const req = {
         body: invalidLongUrl,
       };
@@ -30,7 +30,6 @@ describe("create Tinyurl", () => {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
       };
-
       await UrlController.createTinyUrl(req, res);
 
       expect(res.status).toHaveBeenCalledWith(401);
@@ -44,7 +43,6 @@ describe("create Tinyurl", () => {
     it("should return the existing URL and a status code 200", async () => {
       validUrl.isUri = jest.fn().mockReturnValue(true);
       UrlModel.findOne = jest.fn().mockResolvedValue(longUrl);
-
       const req = {
         body: longUrl,
       };
@@ -52,7 +50,6 @@ describe("create Tinyurl", () => {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
       };
-
       await UrlController.createTinyUrl(req, res);
 
       expect(res.status).toHaveBeenCalledWith(200);
@@ -80,7 +77,6 @@ describe("create Tinyurl", () => {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
       };
-
       await UrlController.createTinyUrl(req, res);
 
       expect(res.status).toHaveBeenCalledWith(201);
@@ -92,7 +88,6 @@ describe("create Tinyurl", () => {
     it("should return  500 status code", async () => {
       validUrl.isUri = jest.fn().mockResolvedValue(invalidLongUrl);
       UrlModel.findOne = jest.fn().mockRejectedValue(null);
-
       const req = {
         body: invalidLongUrl,
       };
@@ -100,7 +95,6 @@ describe("create Tinyurl", () => {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
       };
-
       await UrlController.createTinyUrl(req, res);
 
       expect(res.status).toHaveBeenCalledWith(500);
@@ -136,7 +130,6 @@ describe("get Tinyurl", () => {
   describe("when a url does not exist in the database", () => {
     it("should return a status code 404", async () => {
       UrlModel.findOne = jest.fn().mockResolvedValue(false);
-
       const req = {
         params: {
           code: "dertk",
@@ -156,7 +149,6 @@ describe("get Tinyurl", () => {
   describe("when there is an error while quering the database", () => {
     it("should return a status code 500", async () => {
       UrlModel.findOne = jest.fn().mockRejectedValue(null);
-
       const req = {
         params: {
           code: "dertk",
@@ -218,6 +210,50 @@ describe("get All Tinyurl", () => {
           message: "Request failed",
           error: null,
         });
+      });
+    });
+  });
+});
+
+describe("delete Tinyurl", () => {
+  describe("when a user wants to delete a tiny url from the data base", () => {
+    it("should delete url successfully with a 200 status code", async () => {
+      UrlModel.deleteOne = jest.fn().mockResolvedValue(true);
+      const req = {
+        params: {
+          code: "dertk",
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await UrlController.deleteTinyUrl(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(200);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "url deleted sucessfully",
+      });
+    });
+  });
+  describe("when there is an internal server error", () => {
+    it("should return status code 500", async () => {
+      UrlModel.deleteOne = jest.fn().mockRejectedValue(null);
+      const req = {
+        params: {
+          code: "dertk",
+        },
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      };
+      await UrlController.deleteTinyUrl(req, res);
+
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.json).toHaveBeenCalledWith({
+        message: "Request failed",
+        error: null,
       });
     });
   });
