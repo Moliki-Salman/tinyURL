@@ -91,7 +91,7 @@ describe("create Tinyurl", () => {
   describe("when a longUrl is invalid and does not exist in the database", () => {
     it("should return  500 status code", async () => {
       validUrl.isUri = jest.fn().mockResolvedValue(invalidLongUrl);
-      UrlModel.findOne = jest.fn().mockRejectedValue();
+      UrlModel.findOne = jest.fn().mockRejectedValue(null);
 
       const req = {
         body: invalidLongUrl,
@@ -106,6 +106,7 @@ describe("create Tinyurl", () => {
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.json).toHaveBeenCalledWith({
         message: "Internal Server error",
+        error: null,
       });
     });
   });
@@ -154,7 +155,7 @@ describe("get Tinyurl", () => {
 
   describe("when there is an error while quering the database", () => {
     it("should return a status code 500", async () => {
-      UrlModel.findOne = jest.fn().mockRejectedValue();
+      UrlModel.findOne = jest.fn().mockRejectedValue(null);
 
       const req = {
         params: {
@@ -170,14 +171,15 @@ describe("get Tinyurl", () => {
       expect(res.status).toHaveBeenCalledWith(500);
       expect(res.json).toHaveBeenCalledWith({
         message: "Internal Server error",
+        error: null,
       });
     });
   });
 });
 
 describe("get All Tinyurl", () => {
-  describe("to get all the list of tiny url created by a user", () => {
-    it("should  list all created tiny url and return a 200 status code", async () => {
+  describe("get all the list of tiny url created by a user", () => {
+    it("should list all created tiny url and return a 200 status code", async () => {
       UrlModel.find = jest.fn().mockResolvedValue(url);
       const req = {
         user: {
@@ -194,6 +196,28 @@ describe("get All Tinyurl", () => {
       expect(res.json).toHaveBeenCalledWith({
         userId: "user99",
         AllURLS: url,
+      });
+    });
+
+    describe("when there is an error while retrieving url from database", () => {
+      it("should return status code 500", async () => {
+        UrlModel.find = jest.fn().mockRejectedValue(null);
+        const req = {
+          user: {
+            id: "user99",
+          },
+        };
+        const res = {
+          status: jest.fn().mockReturnThis(),
+          json: jest.fn(),
+        };
+        await UrlController.getAllTinyUrls(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({
+          message: "Request failed",
+          error: null,
+        });
       });
     });
   });
