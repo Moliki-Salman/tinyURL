@@ -17,14 +17,14 @@ const createTinyUrl = async (req, res) => {
           longUrl,
           shortUrl,
           urlCode,
-          user: userId,
+          user: userId, // indicates the relationship
           date: new Date(),
         });
         await url.save();
         res.status(201).json(url);
       }
     } catch (error) {
-      res.status(500).json({ message: "Internal Server error" });
+      res.status(500).json({ message: "Internal Server error", error });
     }
   } else {
     res.status(401).json({ message: "long url is not valid" });
@@ -42,17 +42,19 @@ const getTinyUrl = async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ message: "Internal Server error", error: error.message });
+      .json({ message: "Internal Server error", error });
   }
 };
 
 const getAllTinyUrls = async (req, res) => {
   try {
     const userId = req.user.id;
-    const url = await UrlModel.find().populate("user", "email");
-    return res.status(200).json({ userId, AllURLS: url });
+    const url = await UrlModel.find()
+    return res.status(200).json({ AllURLS: url, userId });
   } catch (error) {
-    res.status(500).json({ message: "Request failed", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Request failed", error });
   }
 };
 
@@ -61,7 +63,9 @@ const deleteTinyUrl = async (req, res) => {
     const url = await UrlModel.deleteOne({ urlCode: req.params.code });
     return res.status(200).json({ message: "url deleted sucessfully" });
   } catch (error) {
-    res.status(500).json({ message: "Request failed", error });
+    res
+      .status(500)
+      .json({ message: "Request failed", error });
   }
 };
 
