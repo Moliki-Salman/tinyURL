@@ -12,12 +12,12 @@ const createTinyUrl = async (req, res) => {
         res.status(200).json({ url, message: "ShortUrl created successfully" });
       } else {
         const shortUrl = "http://localhost:3000" + "/" + urlCode;
-        // const userId = req.user.id;
+        const userId = req.user.id;
         url = new UrlModel({
           longUrl,
           shortUrl,
           urlCode,
-          // user: userId,//
+          user: userId, // indicates the relationship
           date: new Date(),
         });
         await url.save();
