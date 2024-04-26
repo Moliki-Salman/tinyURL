@@ -48,4 +48,4 @@ $ npm run test
 ```bash
 $ nodemon app.js 
 ```
-2. connect the API using postman on port 3000
+2. connect to the API using postman on port 3000
