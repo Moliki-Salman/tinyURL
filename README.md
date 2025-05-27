@@ -22,9 +22,17 @@ Install node from the website and download node for your device type:
 ```bash
 $  https://nodejs.org/en
 ```
+Install MongoDB  for your operating system from the website: 
+```bash
+$  https://www.mongodb.com/docs/manual/installation/
+```
 Clone this repository and run locally
 ```bash
 git clone https://github.com/Moliki-Salman/tinyURL.git
+```
+Run this code to get started
+```bash
+ npm install
 ```
 ## Testing 
  
@@ -40,4 +48,4 @@ $ npm run test
 ```bash
 $ nodemon app.js 
 ```
-2. connect the API using postman on port 3000
+2. connect to the API using postman on port 3000
