@@ -1,8 +1,11 @@
-const jwt = require("jsonwebtoken");
-const userModel = require("../models/user-model");
-const bcrypt = require("bcrypt");
+// const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
+// const userModel = require("../models/user-model");
+import userModel from "../models/user-model.js";
+import bcrypt  from "bcrypt";
+// const bcrypt = require("bcrypt");
 
-const signup = async (req, res) => {
+export const signup = async (req, res) => {
   const { firstname, lastname, email, password } = req.body;
   try {
     const existingUser = await userModel.findOne({ email: email });
@@ -11,7 +14,9 @@ const signup = async (req, res) => {
       return res.status(400).json({ message: "User already exist" });
     }
     bcrypt.hash(password, 10, async function (err, hashedPassword) {
-      if (err) { throw new Error("error", { cause: err }) }
+      if (err) {
+        throw new Error("error", { cause: err });
+      }
       const user = await userModel.create({
         firstname: firstname,
         lastname: lastname,
@@ -25,15 +30,14 @@ const signup = async (req, res) => {
       });
     });
   } catch (error) {
-    res.status(500)
-      .json({
-          message: "Internal Server error", 
-          error: JSON.stringify(error) 
-      });
+    res.status(500).json({
+      message: "Internal Server error",
+      error: JSON.stringify(error),
+    });
   }
 };
 
-const login = async (req, res) => {
+export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await userModel.findOne({ email: email });
@@ -50,7 +54,7 @@ const login = async (req, res) => {
         message: "successful",
         user: { email, token },
       });
-    })
+    });
   } catch (error) {
     res.status(500).json({
       message: "Internal Server error",
@@ -59,7 +63,7 @@ const login = async (req, res) => {
   }
 };
 
-const deleteUser = async (req, res) => {
+export const deleteUser = async (req, res) => {
   try {
     const { email } = req.body;
     const user = await userModel.findOne({ email });
@@ -75,4 +79,4 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { signup, login, deleteUser };
+// module.exports = { signup, login, deleteUser };

@@ -1,13 +1,23 @@
-const express = require("express");
-const router = express.Router();
+// const express = require("express");
+import express from "express";
+const urlRoutes = express.Router();
 
-const urlController = require("../controllers/url-controller");
-const  authenticateUser = require("../config/auth");
+// const urlController = require("../controllers/url-controller");
+import {
+  createTinyUrl,
+  getTinyUrl,
+  getAllTinyUrls,
+  deleteTinyUrl,
+} from "../controllers/url-controller.js";
+// const  authenticateUser = require("../config/auth");
+import { authenticateUser } from "../config/auth.js";
 
-router
-.post("/", authenticateUser, urlController.createTinyUrl)
-.get("/:code",  urlController.getTinyUrl)
-.get("/", authenticateUser,  urlController.getAllTinyUrls)
-.delete("/:code", authenticateUser, urlController.deleteTinyUrl)
+urlRoutes
+  .post("/", authenticateUser, createTinyUrl)
+  .get("/:code", getTinyUrl)
+  .get("/", authenticateUser, getAllTinyUrls)
+  .delete("/:code", authenticateUser, deleteTinyUrl);
 
-module.exports = router
+// module.exports = router;
+
+export default urlRoutes;
