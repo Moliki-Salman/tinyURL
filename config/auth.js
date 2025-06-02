@@ -1,6 +1,6 @@
 // const jwt = require("jsonwebtoken");
 import jwt from "jsonwebtoken";
-import { config }  from "dotenv";
+import { config } from "dotenv";
 config();
 
 export const authenticateUser = async (req, res, next) => {
@@ -14,7 +14,8 @@ export const authenticateUser = async (req, res, next) => {
     req.user = decodedToken;
     next();
   } catch (error) {
+    console.error("Cause of the ERROR:", error);
     return res.status(401).json({ message: "Authentication failed" });
   }
 };
-// module.exports =  authenticateUser
+
